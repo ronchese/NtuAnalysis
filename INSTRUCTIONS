@@ -50,6 +50,12 @@ https://twiki.cern.ch/twiki/bin/viewauth/CMS/NtuAnalysis
 
  -------------- Recipe for the impatient user --------------
 
+Look at steps 1, 2, 3, 7 to produce and analyze a flat ntuple; to analyze 
+the same ntuple outside CMSSW look at steps 10 and 11. Look inside the files
+listed in the "Customize ntuple content, production & analysis" to see how
+to introduce your analysis material in the framework.
+Look at steps 5, 8 (and 12 to do the analysis outside CMSSW) for EDM ntuples.
+Look at steps 6, 9 (and 13 to do the analysis outside CMSSW) for NANOAOD.
 
  -------------- Download and create an analysis skeleton --------------
 
@@ -71,7 +77,7 @@ cmsenv
 NtuAnalysis/uty/makeTemplate.sh xyz
 scram b
 
- -------------- Customize ntuple content --------------
+ -------------- Customize ntuple content, production & analysis --------------
 
 # The ntuple content is defined in the classes XYZNtupleData
 # and XYZNtupleBranch ; the first contains only the variables and the
