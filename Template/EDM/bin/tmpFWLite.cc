@@ -22,7 +22,7 @@
 #include "FWCore/FWLite/interface/AutoLibraryLoader.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
-#include "FWCore/PythonParameterSet/interface/MakeParameterSets.h"
+#include "FWCore/PythonParameterSet/interface/MakePyBind11ParameterSets.h"
 
 #include <TH1F.h>
 #include <TH2F.h>

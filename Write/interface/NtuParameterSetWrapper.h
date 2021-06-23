@@ -19,7 +19,7 @@
 //------------------------------------
 // Collaborating Class Declarations --
 //------------------------------------
-#include "FWCore/PythonParameterSet/interface/MakeParameterSets.h"
+#include "FWCore/PythonParameterSet/interface/MakePyBind11ParameterSets.h"
 
 //---------------
 // C++ Headers --
@@ -38,7 +38,7 @@ class NtuParameterSetWrapper {
    */
   static std::shared_ptr<edm::ParameterSet> readPSetsFrom(
                                             const std::string& fileOrString ) {
-    return edm::readPSetsFrom( fileOrString );
+    return edm::cmspybind11::readPSetsFrom( fileOrString );
   }
 
 };
