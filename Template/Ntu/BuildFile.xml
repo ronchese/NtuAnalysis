@@ -1,5 +1,8 @@
 <use   name="NtuAnalysis/Common"/>
+<use   name="NtuTool/Read"/>
+<use   name="root"/>
 <export>
   <use   name="NtuAnalysis/Common"/>
+  <use   name="root"/>
   <lib   name="1"/>
 </export>

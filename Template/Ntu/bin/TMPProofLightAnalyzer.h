@@ -1,5 +1,5 @@
-#ifndef TMPProofAnalyzer_h
-#define TMPProofAnalyzer_h
+#ifndef TMPAnalysis_Ntu_TMPProofAnalyzer_h
+#define TMPAnalysis_Ntu_TMPProofAnalyzer_h
 
 #include "TROOT.h"
 #include "TChain.h"
@@ -24,6 +24,7 @@ class ProofLightReaderInterface: public TMPAnalyzer {
   bool gE( int ientry ) {
     return this->getEntry( ientry );
   };
+  using NtuLightReader::process;
   void process( int ientry ) {
     return;
   };
@@ -38,7 +39,7 @@ class TMPProofLightAnalyzer: public TSelector,
 
  public:
 
-  TMPProofLightAnalyzer( TTree* tree = 0 );
+  TMPProofLightAnalyzer( TTree* tree = nullptr );
   virtual ~TMPProofLightAnalyzer();
   virtual Int_t   Version() const { return 2; }
   virtual void    Begin( TTree *tree );
@@ -57,5 +58,5 @@ class TMPProofLightAnalyzer: public TSelector,
 
 };
 
-#endif
+#endif // TMPAnalysis_Ntu_TMPProofAnalyzer_h
 

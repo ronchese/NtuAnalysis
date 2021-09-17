@@ -1,5 +1,5 @@
-#ifndef NtuEventBranch_H
-#define NtuEventBranch_H
+#ifndef NtuAnalysis_Common_NtuEventBranch_h
+#define NtuAnalysis_Common_NtuEventBranch_h
 
 #include "NtuAnalysis/Common/interface/NtuEventHeader.h"
 #include <string>
@@ -10,7 +10,7 @@ class NtuEventBranch: public virtual NtuEventHeader, public virtual T {
 
  public:
 
-  virtual ~NtuEventBranch();
+  ~NtuEventBranch() override;
 
  protected:
 
@@ -26,8 +26,8 @@ class NtuEventBranch: public virtual NtuEventHeader, public virtual T {
  private:
 
   // dummy copy constructor and assignment
-  NtuEventBranch           ( const NtuEventBranch& td );
-  NtuEventBranch& operator=( const NtuEventBranch& td );
+  NtuEventBranch           ( const NtuEventBranch& td ) = delete;
+  NtuEventBranch& operator=( const NtuEventBranch& td ) = delete;
 
 };
 
@@ -35,5 +35,5 @@ template <class T>
 NtuEventBranch<T>::~NtuEventBranch() {
 }
 
-#endif
+#endif // NtuAnalysis_Common_NtuEventBranch_h
 

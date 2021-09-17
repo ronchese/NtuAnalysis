@@ -1,5 +1,5 @@
 #define UTIL_USE FULL
-#include "NtuTool/Read/interface/TreeReader.h"
+#include "NtuTool/Common/interface/TreeReader.h"
 #include "TH1.h"
 #include "TStyle.h"
 #include <iostream>
@@ -12,23 +12,29 @@
 #include "NtuTool/Read/src/EDMTypeReaderTS.cc"
 #include "NtuTool/Read/src/EDMTypeReaderSTL.cc"
 #include "NtuTool/Read/src/EDMXYZVectorReader.cc"
+#include "NtuTool/Read/src/NANOTypeReaderTS.cc"
+#include "NtuTool/Read/src/NANOTypeReaderSTL.cc"
 #include "NtuTool/Common/src/DataConvert.cc"
 #include "NtuTool/Common/src/DataHandler.cc"
 #include "NtuTool/Common/src/DataHandlerManager.cc"
 #include "NtuTool/Common/src/DataHandlerMap.cc"
 #include "NtuTool/Common/src/DataReset.cc"
 #include "NtuTool/Common/src/DataResetString.cc"
+#include "NtuTool/Common/src/BranchInterface.cc"
 #include "NtuTool/Common/src/TreeWrapper.cc"
-#include "NtuTool/Read/src/TreeReader.cc"
+#include "NtuTool/Common/src/TreeReader.cc"
 #include "NtuTool/Read/src/EDMTreeReader.cc"
 #include "NtuTool/Read/src/EDMStringReader.cc"
 #include "NtuTool/Read/src/EDMTypeReaderManager.cc"
+#include "NtuTool/Read/src/NANOHandler.cc"
+#include "NtuTool/Read/src/NANOTreeReader.cc"
+#include "NtuTool/Read/src/NANOStringReader.cc"
+#include "NtuTool/Read/src/NANOTypeReaderManager.cc"
 
-#include "NtuTool/Common/src/TreeTypeWriterTS.cc"
-#include "NtuTool/Common/src/TreeTypeWriterSTL.cc"
-#include "NtuTool/Common/src/TreeTypeWriterMath.cc"
+#include "NtuTool/Common/src/TreeTypeHandlerTS.cc"
+#include "NtuTool/Common/src/TreeTypeHandlerSTL.cc"
+#include "NtuTool/Common/src/TreeTypeHandlerMath.cc"
 
-#include "NtuAnalysis/Common/src/NtuData.cc"
 #include "TMPAnalysis/Ntu/src/TMPNtupleData.cc"
 #include "NtuAnalysis/Common/src/NtuEventSelect.cc"
 #include "NtuAnalysis/Common/src/NtuAnalyzerUtil.cc"
@@ -144,6 +150,7 @@ Bool_t TMPProofAnalyzer::Process( Long64_t ientry ) {
    // The return value is currently not used.
 
    // *** 1. *** Tell the tree to load the data for this entry:
+  if ( !preSelect( ientry ) ) return false;
 //  cout << "getEntry " << ientry << endl;
   if ( !gE( ientry ) ) return false;
 //  if ( !getEntry( ientry ) ) return false;

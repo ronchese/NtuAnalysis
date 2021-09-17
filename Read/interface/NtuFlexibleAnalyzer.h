@@ -1,6 +1,7 @@
 #define UTIL_USE FULL
 #include "NtuAnalysis/Read/interface/NtuReader.h"
 #include "NtuAnalysis/Read/interface/NtuEDMReader.h"
+#include "NtuAnalysis/Read/interface/NtuNANOReader.h"
 
 /** \class NtuFlexibleAnalyzer
  *
@@ -18,12 +19,12 @@
 //----------------------
 // Base Class Headers --
 //----------------------
-#include "NtuTool/Read/interface/TreeStandardAnalyzer.h"
+#include "NtuTool/Common/interface/TreeStandardAnalyzer.h"
 
 //------------------------------------
 // Collaborating Class Declarations --
 //------------------------------------
-#include "NtuTool/Read/interface/TreeReader.h"
+#include "NtuTool/Common/interface/TreeReader.h"
 #include "TChain.h"
 
 //---------------
@@ -39,7 +40,7 @@ class TreeReader;
 //              -- Class Interface --
 //              ---------------------
 
-template<class T>
+template <class T>
 class NtuFlexibleAnalyzer: public TreeStandardAnalyzer {
 
  public:
@@ -54,12 +55,12 @@ class NtuFlexibleAnalyzer: public TreeStandardAnalyzer {
 
   /** Destructor
    */
-  virtual ~NtuFlexibleAnalyzer() {}
+  ~NtuFlexibleAnalyzer() override {}
 
   /** Operations
    */
   /// run the application
-  virtual int run( int argc, char* argv[] ) {
+  int run( int argc, char* argv[] ) override {
 
     std::cout << "NtuFlexibleAnalyzer::run" << std::endl;
 
@@ -67,7 +68,7 @@ class NtuFlexibleAnalyzer: public TreeStandardAnalyzer {
     char** argl = argp + argc;
     std::string key = "";
     std::string val = "";
-    enum ntuType { ntu, edm };
+    enum ntuType { ntu, edm, nano };
     ntuType type = ntu;
     while ( argp < argl ) {
       std::string args( *argp++ );
@@ -77,17 +78,19 @@ class NtuFlexibleAnalyzer: public TreeStandardAnalyzer {
         if ( key == "process"  ) ntuProdProcess  = val;
         if ( key == "producer" ) ntuProdProducer = val;
         if ( key == "ntuType"  ) {
-          if      ( val == "ntu" ) type = ntu;
-          else if ( val == "edm" ) type = edm;
-          else                     std::cout << "invalid ntuple type: " << val
-                                             << " choose \"ntu\" or \"edm\""
-                                             << std::endl;
+          if      ( val == "ntu"  ) type = ntu;
+          else if ( val == "edm"  ) type = edm;
+          else if ( val == "nano" ) type = nano;
+          else                      std::cout << "invalid ntuple type: " << val
+                                              << " choose \"ntu\", \"edm\" or \"nano\""
+                                              << std::endl;
         }
       }
     }
     
-    if ( type == ntu ) new NtuReader<T>;
-    if ( type == edm ) new NtuEDMReader<T>( ntuProdProcess, ntuProdProducer );
+    if ( type == ntu  ) new NtuReader<T>;
+    if ( type == edm  ) new NtuEDMReader<T>( ntuProdProcess, ntuProdProducer );
+    if ( type == nano ) new NtuNANOReader<T>;
 
     return TreeStandardAnalyzer::run( argc, argv );
 
@@ -95,8 +98,8 @@ class NtuFlexibleAnalyzer: public TreeStandardAnalyzer {
 
  private:
 
-  NtuFlexibleAnalyzer( const NtuFlexibleAnalyzer& t );
-  NtuFlexibleAnalyzer& operator=( const NtuFlexibleAnalyzer& t );
+  NtuFlexibleAnalyzer           ( const NtuFlexibleAnalyzer& t ) = delete;
+  NtuFlexibleAnalyzer& operator=( const NtuFlexibleAnalyzer& t ) = delete;
 
   std::string ntuProdProcess;
   std::string ntuProdProducer;

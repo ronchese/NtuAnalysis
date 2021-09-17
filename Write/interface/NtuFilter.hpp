@@ -9,7 +9,7 @@
 
 template <class T>
 NtuFilter<T>::NtuFilter( const edm::ParameterSet& ps ):
-  T( ps, this ) {
+  NtuWriteInterface<T>( ps, this ) {
   histName = ps.getUntrackedParameter<std::string>( "histName" );
 }
 
@@ -21,7 +21,7 @@ NtuFilter<T>::~NtuFilter() {
 
 template <class T>
 void NtuFilter<T>::beginJob() {
-  T::beginJob();
+  NtuWriteInterface<T>::beginJob();
   analyzedFile = 0;
   return;
 }
@@ -29,7 +29,7 @@ void NtuFilter<T>::beginJob() {
 
 template <class T>
 void NtuFilter<T>::endJob()  {
-  T::endJob();
+  NtuWriteInterface<T>::endJob();
   TreeWrapper::save( histName );
   return;
 }
@@ -40,7 +40,7 @@ void NtuFilter<T>::beginRun( const edm::Run& run,
                              const edm::EventSetup& es ) {
   currentRun     = &run;
   currentEvSetup = &es;
-  T::beginRun();
+  NtuWriteInterface<T>::beginRun();
   return;
 }
 
@@ -48,7 +48,7 @@ void NtuFilter<T>::beginRun( const edm::Run& run,
 template <class T>
 void NtuFilter<T>::endRun( const edm::Run& run,
                            const edm::EventSetup& es ) {
-  T::endRun();
+  NtuWriteInterface<T>::endRun();
   return;
 }
 
@@ -59,6 +59,6 @@ bool NtuFilter<T>::filter( edm::Event& ev,
   currentEvent   = &ev;
   currentEvSetup = &es;
   int ientry = 0;
-  return T::analyzeEDM( ev, ientry, analyzedFile++ );
+  return NtuWriteInterface<T>::analyzeEDM( ev, ientry, analyzedFile++ );
 }
 

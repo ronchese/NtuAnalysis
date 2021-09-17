@@ -1,5 +1,5 @@
-#ifndef NtuEDMAnalyzer_h
-#define NtuEDMAnalyzer_h
+#ifndef NtuAnalysis_Write_NtuEDMAnalyzer_h
+#define NtuAnalysis_Write_NtuEDMAnalyzer_h
 
 #define UTIL_USE FULL
 
@@ -28,9 +28,9 @@ class NtuEDMAnalyzer: public virtual NtuEventHeader,
  protected:
 
   NtuEDMAnalyzer( const edm::ParameterSet& ps );
-  virtual ~NtuEDMAnalyzer();
+  ~NtuEDMAnalyzer() override;
 
-  template<class T>
+  template <class T>
   void getParameter( const std::string& key, T& val,
                      const std::string& def, bool tracked ) {
     setUserParameter( key, def );
@@ -44,15 +44,15 @@ class NtuEDMAnalyzer: public virtual NtuEventHeader,
     return;
   }
 
-  virtual void beginJob();
+  virtual void beginJob() override;
   virtual void beginRun();
   virtual bool analyzeEDM( const edm::EventBase& ev,
                            int ientry, int event_file );
   virtual void read( const edm::EventBase& ev );
   virtual void endRun();
-  virtual void endJob();
+  virtual void endJob() override;
 
-  template<class Consumer, class Obj>
+  template <class Consumer, class Obj>
   static void consume( NtuEDConsumer<Consumer>* c,
                        typename NtuEDToken<Obj>::type& token,
                        const std::string& label ) {
@@ -61,7 +61,7 @@ class NtuEDMAnalyzer: public virtual NtuEventHeader,
     if ( c != 0 ) c->template consume<Obj>( token, tag );
     return;
   }
-  template<class Consumer, class Obj>
+  template <class Consumer, class Obj>
   static void consume( NtuEDConsumer<Consumer>* c,
                        typename NtuEDToken<Obj>::type& token,
                        const edm::InputTag tag ) {
@@ -69,19 +69,19 @@ class NtuEDMAnalyzer: public virtual NtuEventHeader,
     return;
   }
 
-  template<class T>
+  template <class T>
   class ObjectConsumer {
    public:
     ObjectConsumer( NtuEDMAnalyzer* a, NtuEDConsumer<T>* c ): 
      analyzer( a ),
      consumer( c ) {}
-    template<class Obj>
+    template <class Obj>
     void consume( NtuEDToken<Obj>& nt,
                   const std::string& label ) {
       analyzer->template consume<T,Obj>( consumer, nt.token, label );
       return;
     }
-    template<class Obj>
+    template <class Obj>
     void consume( NtuEDToken<Obj>& nt,
                   const edm::InputTag tag ) {
       analyzer->template consume<T,Obj>( consumer, nt.token, tag );
@@ -91,7 +91,7 @@ class NtuEDMAnalyzer: public virtual NtuEventHeader,
     NtuEDMAnalyzer* analyzer;
     NtuEDConsumer<T>* consumer;
   };
-  template<class T>
+  template <class T>
   ObjectConsumer<T>& getConsumer( NtuEDConsumer<T>* c ) {
     static ObjectConsumer<T>* ptr = new ObjectConsumer<T>( this, c );
     return *ptr;
@@ -100,9 +100,9 @@ class NtuEDMAnalyzer: public virtual NtuEventHeader,
  private:
 
   // dummy copy constructor and assignment
-  NtuEDMAnalyzer           ( const NtuEDMAnalyzer& c );
-  NtuEDMAnalyzer& operator=( const NtuEDMAnalyzer& c );
+  NtuEDMAnalyzer           ( const NtuEDMAnalyzer& c ) = delete;
+  NtuEDMAnalyzer& operator=( const NtuEDMAnalyzer& c ) = delete;
 
 };
 
-#endif
+#endif // NtuAnalysis_Write_NtuEDMAnalyzer_h

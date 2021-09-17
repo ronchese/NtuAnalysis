@@ -6,7 +6,7 @@
 #include <memory>
 
 template <class T>
-NtuEDMWriteSteering<T>::NtuEDMWriteSteering( const edm::ParameterSet& ps ):
+NtuNANOWriteSteering<T>::NtuNANOWriteSteering( const edm::ParameterSet& ps ):
   T( ps, this ) {
   histName = ps.getUntrackedParameter<std::string>( "histName" );
   initWrite();
@@ -14,12 +14,12 @@ NtuEDMWriteSteering<T>::NtuEDMWriteSteering( const edm::ParameterSet& ps ):
 
 
 template <class T>
-NtuEDMWriteSteering<T>::~NtuEDMWriteSteering() {
+NtuNANOWriteSteering<T>::~NtuNANOWriteSteering() {
 }
 
 
 template <class T>
-void NtuEDMWriteSteering<T>::beginJob() {
+void NtuNANOWriteSteering<T>::beginJob() {
   T::beginJob();
   analyzedFile = 0;
   return;
@@ -27,7 +27,7 @@ void NtuEDMWriteSteering<T>::beginJob() {
 
 
 template <class T>
-void NtuEDMWriteSteering<T>::endJob()  {
+void NtuNANOWriteSteering<T>::endJob()  {
   T::endJob();
   TreeWrapper::save( histName );
   return;
@@ -35,8 +35,8 @@ void NtuEDMWriteSteering<T>::endJob()  {
 
 
 template <class T>
-void NtuEDMWriteSteering<T>::beginRun( const edm::Run& run,
-                                       const edm::EventSetup& es ) {
+void NtuNANOWriteSteering<T>::beginRun( const edm::Run& run,
+                                        const edm::EventSetup& es ) {
   currentRun     = &run;
   currentEvSetup = &es;
   T::beginRun();
@@ -45,16 +45,16 @@ void NtuEDMWriteSteering<T>::beginRun( const edm::Run& run,
 
 
 template <class T>
-void NtuEDMWriteSteering<T>::endRun( const edm::Run& run,
-                                     const edm::EventSetup& es ) {
+void NtuNANOWriteSteering<T>::endRun( const edm::Run& run,
+                                      const edm::EventSetup& es ) {
   T::endRun();
   return;
 }
 
 
 template <class T>
-bool NtuEDMWriteSteering<T>::fill( const edm::Event& ev,
-                                   const edm::EventSetup& es ) {
+bool NtuNANOWriteSteering<T>::fill( const edm::Event& ev,
+                                    const edm::EventSetup& es ) {
   currentEvent   = &ev;
   currentEvSetup = &es;
   int ientry = 0;

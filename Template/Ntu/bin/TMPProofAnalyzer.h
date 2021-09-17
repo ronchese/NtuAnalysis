@@ -1,5 +1,5 @@
-#ifndef TMPProofAnalyzer_h
-#define TMPProofAnalyzer_h
+#ifndef TMPAnalysis_Ntu_TMPProofAnalyzer_h
+#define TMPAnalysis_Ntu_TMPProofAnalyzer_h
 
 #include "TROOT.h"
 #include "TChain.h"
@@ -11,8 +11,9 @@
 #include <vector>
 
 #include "TMPAnalyzer.h"
-#include "NtuTool/Read/interface/TreeReader.h"
+#include "NtuTool/Common/interface/TreeReader.h"
 #include "NtuTool/Read/interface/EDMTreeReader.h"
+#include "NtuTool/Read/interface/NANOTreeReader.h"
 
 #include "TMPProofSetup.cc"
 
@@ -51,13 +52,22 @@ class TMPProofEDMReader: public TMPProofReaderInterface,
   };
 };
 
+class TMPProofNANOReader: public TMPProofReaderInterface,
+                          public NANOTreeReader {
+ protected:
+  void iT( TTree* tree ) {
+    cout << "initRead" << endl;
+    this->initRead( tree );
+  };
+};
+
 
 class TMPProofAnalyzer: public TSelector,
                         public NtuPReader {
 
  public:
 
-  TMPProofAnalyzer( TTree* tree = 0 );
+  TMPProofAnalyzer( TTree* tree = nullptr );
   virtual ~TMPProofAnalyzer();
   virtual Int_t   Version() const { return 2; }
   virtual void    Begin( TTree *tree );
@@ -76,5 +86,5 @@ class TMPProofAnalyzer: public TSelector,
 
 };
 
-#endif
+#endif // TMPAnalysis_Ntu_TMPProofAnalyzer_h
 

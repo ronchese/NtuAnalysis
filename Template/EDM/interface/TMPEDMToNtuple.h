@@ -1,6 +1,11 @@
-#ifndef TMPEDMToNtuple_h
-#define TMPEDMToNtuple_h
+#ifndef TMPAnalysis_EDM_TMPEDMToNtuple_h
+#define TMPAnalysis_EDM_TMPEDMToNtuple_h
 
+// the following header files must appear in the following order, due to
+// cross-dependencies through preprocessor macro definition: an ugly 
+// situation, but didn't find any better solution to avoid both code 
+// duplication and excessive code fragmentation in a large number of 
+// source files
 #include "NtuAnalysis/Write/interface/NtuEDMAnalyzer.h"
 #include "NtuAnalysis/Write/interface/NtuEDConsumer.h"
 #include "TMPAnalysis/Ntu/bin/TMPAnalyzer.h"
@@ -22,10 +27,10 @@ class TMPEDMToNtuple: public TMPAnalyzer,
 
  public:
 
-  template<class T>
-  TMPEDMToNtuple( const edm::ParameterSet& ps, NtuEDConsumer<T>* c  ):
+  template <class T>
+  TMPEDMToNtuple( const edm::ParameterSet& ps, NtuEDConsumer<T>* c ):
    NtuEDMAnalyzer( ps ) {
-    // parse ParameterSet
+    // parse ParameterSet and bind ntuple branches to variables
     build( ps );
     // interface to allow uniform access to data in different CMSSW versions
     ObjectConsumer<T>& oc = getConsumer( c );
@@ -34,7 +39,7 @@ class TMPEDMToNtuple: public TMPAnalyzer,
     oc.template consume< std::vector<pat::Jet > >( gt_jets ,
                                                  labelJets  );
   }
-  virtual ~TMPEDMToNtuple();
+  ~TMPEDMToNtuple() override;
 
   virtual void beginJob();
   virtual void beginRun();
@@ -44,7 +49,7 @@ class TMPEDMToNtuple: public TMPAnalyzer,
 
  private:
 
-  template<class PATObject> class CompareByPt {
+  template <class PATObject> class CompareByPt {
    public:
     bool operator()( const PATObject* l, const PATObject* r ) {
       return l->pt() > r->pt();
@@ -68,4 +73,4 @@ class TMPEDMToNtuple: public TMPAnalyzer,
 
 };
 
-#endif
+#endif // TMPAnalysis_EDM_TMPEDMToNtuple_h

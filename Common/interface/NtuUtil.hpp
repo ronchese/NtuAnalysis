@@ -12,23 +12,23 @@
 
 //NtuUtil::ObjectSelection NtuUtil::dummySel;
 
-template<class T>
+template <class T>
 NtuUtil<T>::NtuUtil() {
 }
 
 
-template<class T>
+template <class T>
 NtuUtil<T>::~NtuUtil() {
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::energy( T px, T py, T pz, T mm ) {
   return sqrt( ( px * px ) + ( py * py ) + ( pz * pz ) + ( mm * mm ) );
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::invMass( T px, T py, T pz, T ee ) {
   T mq = ( px * px ) + ( py * py ) + ( pz * pz ) - ( ee * ee );
   if ( mq > 0.0 ) return 0.0;
@@ -36,7 +36,7 @@ T NtuUtil<T>::invMass( T px, T py, T pz, T ee ) {
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::invMass( T px1, T py1, T pz1, T ee1,
                        T px2, T py2, T pz2, T ee2 ) {
   T pxt = px1 + px2;
@@ -48,7 +48,7 @@ T NtuUtil<T>::invMass( T px1, T py1, T pz1, T ee1,
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::invMass( T px1, T py1, T pz1, T ee1,
                        T px2, T py2, T pz2, T ee2,
                        T px3, T py3, T pz3, T ee3 ) {
@@ -61,7 +61,7 @@ T NtuUtil<T>::invMass( T px1, T py1, T pz1, T ee1,
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::invMass( T px1, T py1,T pz1, T ee1,
                        T px2, T py2, T pz2, T ee2,
                        T px3, T py3, T pz3, T ee3,
@@ -75,7 +75,7 @@ T NtuUtil<T>::invMass( T px1, T py1,T pz1, T ee1,
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::invMSph( T  pt, T eta, T phi, T  ee ) {
   T px;
   T py;
@@ -87,7 +87,7 @@ T NtuUtil<T>::invMSph( T  pt, T eta, T phi, T  ee ) {
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::invMSph( T  pt1, T eta1, T phi1, T  ee1,
                        T  pt2, T eta2, T phi2, T  ee2 ) {
   T px1;
@@ -103,7 +103,7 @@ T NtuUtil<T>::invMSph( T  pt1, T eta1, T phi1, T  ee1,
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::invMSph( T  pt1, T eta1, T phi1, T  ee1,
                        T  pt2, T eta2, T phi2, T  ee2,
                        T  pt3, T eta3, T phi3, T  ee3 ) {
@@ -125,7 +125,7 @@ T NtuUtil<T>::invMSph( T  pt1, T eta1, T phi1, T  ee1,
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::invMSph( T  pt1, T eta1, T phi1, T  ee1,
                        T  pt2, T eta2, T phi2, T  ee2,
                        T  pt3, T eta3, T phi3, T  ee3,
@@ -153,7 +153,7 @@ T NtuUtil<T>::invMSph( T  pt1, T eta1, T phi1, T  ee1,
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::invMass_M( T px1, T py1, T pz1, T mm1,
                          T px2, T py2, T pz2, T mm2 ) {
   T pxt = px1 + px2;
@@ -166,7 +166,7 @@ T NtuUtil<T>::invMass_M( T px1, T py1, T pz1, T mm1,
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::invMass_M( T px1, T py1, T pz1, T mm1,
                          T px2, T py2, T pz2, T mm2,
                          T px3, T py3, T pz3, T mm3 ) {
@@ -181,7 +181,7 @@ T NtuUtil<T>::invMass_M( T px1, T py1, T pz1, T mm1,
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::invMass_M( T px1, T py1, T pz1, T mm1,
                          T px2, T py2, T pz2, T mm2,
                          T px3, T py3, T pz3, T mm3,
@@ -198,7 +198,7 @@ T NtuUtil<T>::invMass_M( T px1, T py1, T pz1, T mm1,
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::invMSph_M( T  pt1, T eta1, T phi1, T  mm1,
                          T  pt2, T eta2, T phi2, T  mm2 ) {
   T px1;
@@ -214,7 +214,7 @@ T NtuUtil<T>::invMSph_M( T  pt1, T eta1, T phi1, T  mm1,
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::invMSph_M( T  pt1, T eta1, T phi1, T  mm1,
                          T  pt2, T eta2, T phi2, T  mm2,
                          T  pt3, T eta3, T phi3, T  mm3 ) {
@@ -236,7 +236,7 @@ T NtuUtil<T>::invMSph_M( T  pt1, T eta1, T phi1, T  mm1,
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::invMSph_M( T  pt1, T eta1, T phi1, T  mm1,
                          T  pt2, T eta2, T phi2, T  mm2,
                          T  pt3, T eta3, T phi3, T  mm3,
@@ -264,7 +264,7 @@ T NtuUtil<T>::invMSph_M( T  pt1, T eta1, T phi1, T  mm1,
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::dSqua( T a1, T b1, T a2, T b2 ) {
   T aD = a1 - a2;
   T bD = b1 - b2;
@@ -272,7 +272,7 @@ T NtuUtil<T>::dSqua( T a1, T b1, T a2, T b2 ) {
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::dSqua( T a1, T b1, T c1,
                      T a2, T b2, T c2 ) {
   T aD = a1 - a2;
@@ -282,7 +282,7 @@ T NtuUtil<T>::dSqua( T a1, T b1, T c1,
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::delta( T a1, T b1,
                      T a2, T b2 ) {
   T aD = a1 - a2;
@@ -291,7 +291,7 @@ T NtuUtil<T>::delta( T a1, T b1,
 }
 
 
-template<class T>
+template <class T>
 T NtuUtil<T>::delta( T a1, T b1, T c1,
                      T a2, T b2, T c2 ) {
   T aD = a1 - a2;
@@ -300,7 +300,7 @@ T NtuUtil<T>::delta( T a1, T b1, T c1,
   return sqrt( ( aD * aD ) + ( bD * bD ) + ( cD * cD ) );
 }
 
-template<class T>
+template <class T>
 T NtuUtil<T>::dRSqua( T eta1, T phi1,
                       T eta2, T phi2 ) {
   T etaD = eta1 - eta2;
@@ -309,7 +309,7 @@ T NtuUtil<T>::dRSqua( T eta1, T phi1,
   return ( etaD * etaD ) + ( phiD * phiD );
 }
 
-template<class T>
+template <class T>
 T NtuUtil<T>::deltaR( T eta1, T phi1,
                       T eta2, T phi2 ) {
   T etaD = eta1 - eta2;
@@ -318,18 +318,18 @@ T NtuUtil<T>::deltaR( T eta1, T phi1,
   return sqrt( ( etaD * etaD ) + ( phiD * phiD ) );
 }
 
-template<class T>
+template <class T>
 T NtuUtil<T>::modSqua( T x, T y, T z ) {
   return ( x * x ) + ( y * y ) + ( z * z );
 }
 
-template<class T>
+template <class T>
 T NtuUtil<T>::modSqua( T t, T e ) {
   T z = t / tan( 2 * atan( exp( -e ) ) );
   return ( t * t ) + ( z * z );
 }
 
-template<class T>
+template <class T>
 T NtuUtil<T>::angleCart( T x1, T y1, T z1,
                          T x2, T y2, T z2 ) {
   T s = ( x1 * x2 ) + ( y1 * y2 ) + ( z1 * z2 );
@@ -338,7 +338,7 @@ T NtuUtil<T>::angleCart( T x1, T y1, T z1,
   return acos( s / p );
 }
 
-template<class T>
+template <class T>
 T NtuUtil<T>::angleSphe( T t1, T e1, T p1,
                          T t2, T e2, T p2 ) {
   T x1;
@@ -352,7 +352,7 @@ T NtuUtil<T>::angleSphe( T t1, T e1, T p1,
   return angleCart( x1, y1, z1, x2, y2, z2 );
 }
 
-template<class T>
+template <class T>
 T NtuUtil<T>::ptCart( T px, T py, T pz,
                       T qx, T qy, T qz ) {
   T s = ( px * qx ) + ( py * qy ) + ( pz * qz );
@@ -363,7 +363,7 @@ T NtuUtil<T>::ptCart( T px, T py, T pz,
   return sqrt( p ) * f;
 }
 
-template<class T>
+template <class T>
 T NtuUtil<T>::ptSphe( T pt, T pe, T pp,
                       T qe, T qp ) {
   T px;
@@ -377,13 +377,13 @@ T NtuUtil<T>::ptSphe( T pt, T pe, T pp,
   return ptCart( px, py, pz, qx, qy, qz );
 }
 
-template<class T>
+template <class T>
 T NtuUtil<T>::plCart( T px, T py, T pz,
                       T qx, T qy, T qz ) {
   return ( ( px * qx ) + ( py * qy ) + ( pz * qz ) ) / modCart( qx, qy, qz );
 }
 
-template<class T>
+template <class T>
 T NtuUtil<T>::plSphe( T pt, T pe, T pp,
                       T qe, T qp ) {
   T px;
@@ -397,7 +397,7 @@ T NtuUtil<T>::plSphe( T pt, T pe, T pp,
   return plCart( px, py, pz, qx, qy, qz );
 }
 
-template<class T>
+template <class T>
 T NtuUtil<T>::transf( T  px, T  py, T  pz, T  ep,
                       T  qx, T  qy, T  qz, T  eq,
                       T& tx, T& ty, T& tz, T& et ) {
@@ -422,7 +422,7 @@ T NtuUtil<T>::transf( T  px, T  py, T  pz, T  ep,
   return at;
 }
 
-template<class T>
+template <class T>
 T NtuUtil<T>::ptCMin( T px, T py, T pz,
                       T qx, T qy, T qz ) {
   T s = ( px * qx ) + ( py * qy ) + ( pz * qz );
@@ -433,7 +433,7 @@ T NtuUtil<T>::ptCMin( T px, T py, T pz,
   return ( p < q ? sqrt( p ) * f : sqrt( q ) * f );
 }
 
-template<class T>
+template <class T>
 T NtuUtil<T>::ptSMin( T pt, T pe, T pp,
                       T qt, T qe, T qp ) {
   T px;
@@ -447,7 +447,7 @@ T NtuUtil<T>::ptSMin( T pt, T pe, T pp,
   return ptCMin( px, py, pz, qx, qy, qz );
 }
 
-template<class T>
+template <class T>
 T NtuUtil<T>::ptCMax( T px, T py, T pz,
                       T qx, T qy, T qz ) {
   T s = ( px * qx ) + ( py * qy ) + ( pz * qz );
@@ -458,7 +458,7 @@ T NtuUtil<T>::ptCMax( T px, T py, T pz,
   return ( p > q ? sqrt( p ) * f : sqrt( q ) * f );
 }
 
-template<class T>
+template <class T>
 T NtuUtil<T>::ptSMax( T pt, T pe, T pp,
                       T qt, T qe, T qp ) {
   T px;
@@ -472,7 +472,7 @@ T NtuUtil<T>::ptSMax( T pt, T pe, T pp,
   return ptCMax( px, py, pz, qx, qy, qz );
 }
 
-template<class T>
+template <class T>
 void NtuUtil<T>::convCartSphe( T  x, T  y, T  z,
                                T& t, T& e, T& p ) {
   t = sqrt( ( x * x ) + ( y * y ) );
@@ -484,7 +484,7 @@ void NtuUtil<T>::convCartSphe( T  x, T  y, T  z,
 }
 
 
-template<class T>
+template <class T>
 void NtuUtil<T>::convSpheCart( T  t, T  e, T  p,
                                T& x, T& y, T& z ) {
   x = t * cos( p );
@@ -494,7 +494,7 @@ void NtuUtil<T>::convSpheCart( T  t, T  e, T  p,
 }
 
 
-template<class T>
+template <class T>
 void NtuUtil<T>::convCartSphe( const std::vector<T>* x,
                                const std::vector<T>* y,
                                const std::vector<T>* z,
@@ -520,7 +520,7 @@ void NtuUtil<T>::convCartSphe( const std::vector<T>* x,
 }
 
 
-template<class T>
+template <class T>
 void NtuUtil<T>::convSpheCart( const std::vector<T>* t,
                                const std::vector<T>* e,
                                const std::vector<T>* p,
@@ -546,7 +546,7 @@ void NtuUtil<T>::convSpheCart( const std::vector<T>* t,
 }
 
 
-template<class T>
+template <class T>
 void NtuUtil<T>::associateObjects( const std::vector<T>* lObjPt,
                                    const std::vector<T>* lObjEta,
                                    const std::vector<T>* lObjPhi,
@@ -598,27 +598,27 @@ void NtuUtil<T>::associateObjects( const std::vector<T>* lObjPt,
   assoc->resize( nl, noAss );
   std::set<int> used;
   for ( il = 0; il < nl; ++il ) {
-    if ( ( lObjSel != 0 ) && !(*lObjSel)( il ) ) continue;
+    if ( ( lObjSel != nullptr ) && !(*lObjSel)( il ) ) continue;
     iAss = -1;
     dMin = objDist->dMax();
-    lPt     = ( lObjPt    != 0 ? lObjPt    ->at( il ) : 0.0 );
-    lEta    = ( lObjEta   != 0 ? lObjEta   ->at( il ) : 0.0 );
-    lPhi    = ( lObjPhi   != 0 ? lObjPhi   ->at( il ) : 0.0 );
-    lPx     = ( lObjPx    != 0 ? lObjPx    ->at( il ) : 0.0 );
-    lPy     = ( lObjPy    != 0 ? lObjPy    ->at( il ) : 0.0 );
-    lPz     = ( lObjPz    != 0 ? lObjPz    ->at( il ) : 0.0 );
-    lE      = ( lObjE     != 0 ? lObjE     ->at( il ) : 0.0 );
-    lCharge = ( lObjCharge!= 0 ? lObjCharge->at( il ) : 0   );
+    lPt     = ( lObjPt    != nullptr ? lObjPt    ->at( il ) : 0.0 );
+    lEta    = ( lObjEta   != nullptr ? lObjEta   ->at( il ) : 0.0 );
+    lPhi    = ( lObjPhi   != nullptr ? lObjPhi   ->at( il ) : 0.0 );
+    lPx     = ( lObjPx    != nullptr ? lObjPx    ->at( il ) : 0.0 );
+    lPy     = ( lObjPy    != nullptr ? lObjPy    ->at( il ) : 0.0 );
+    lPz     = ( lObjPz    != nullptr ? lObjPz    ->at( il ) : 0.0 );
+    lE      = ( lObjE     != nullptr ? lObjE     ->at( il ) : 0.0 );
+    lCharge = ( lObjCharge!= nullptr ? lObjCharge->at( il ) : 0   );
     for ( ir = 0; ir < nr; ++ir ) {
-      if ( ( rObjSel != 0 ) && !(*rObjSel)( ir ) ) continue;
-      rPt     = ( rObjPt    != 0 ? rObjPt    ->at( ir ) : 0.0 );
-      rEta    = ( rObjEta   != 0 ? rObjEta   ->at( ir ) : 0.0 );
-      rPhi    = ( rObjPhi   != 0 ? rObjPhi   ->at( ir ) : 0.0 );
-      rPx     = ( rObjPx    != 0 ? rObjPx    ->at( ir ) : 0.0 );
-      rPy     = ( rObjPy    != 0 ? rObjPy    ->at( ir ) : 0.0 );
-      rPz     = ( rObjPz    != 0 ? rObjPz    ->at( ir ) : 0.0 );
-      rE      = ( rObjE     != 0 ? rObjE     ->at( ir ) : 0.0 );
-      rCharge = ( rObjCharge!= 0 ? rObjCharge->at( ir ) : 0   );
+      if ( ( rObjSel != nullptr ) && !(*rObjSel)( ir ) ) continue;
+      rPt     = ( rObjPt    != nullptr ? rObjPt    ->at( ir ) : 0.0 );
+      rEta    = ( rObjEta   != nullptr ? rObjEta   ->at( ir ) : 0.0 );
+      rPhi    = ( rObjPhi   != nullptr ? rObjPhi   ->at( ir ) : 0.0 );
+      rPx     = ( rObjPx    != nullptr ? rObjPx    ->at( ir ) : 0.0 );
+      rPy     = ( rObjPy    != nullptr ? rObjPy    ->at( ir ) : 0.0 );
+      rPz     = ( rObjPz    != nullptr ? rObjPz    ->at( ir ) : 0.0 );
+      rE      = ( rObjE     != nullptr ? rObjE     ->at( ir ) : 0.0 );
+      rCharge = ( rObjCharge!= nullptr ? rObjCharge->at( ir ) : 0   );
       if ( singleAssociation && ( used.find( ir ) != used.end() ) ) continue;
       dCur = (*objDist)(    lPt    ,    lEta       ,    lPhi    ,
                             lPx    ,    lPy        ,    lPz     ,

@@ -1,10 +1,8 @@
 #define UTIL_USE BARE
-//#include "NtuTool/Read/interface/TreeReader.h"
 #include "TH1.h"
 #include "TStyle.h"
 #include <iostream>
 
-#include "NtuAnalysis/Common/src/NtuData.cc"
 #include "TMPAnalysis/Ntu/src/TMPNtupleData.cc"
 #include "NtuAnalysis/Common/src/NtuEventSelect.cc"
 #include "NtuAnalysis/Common/src/NtuAnalyzerUtil.cc"

@@ -1,10 +1,17 @@
-#ifndef TMPNtupleData_H
-#define TMPNtupleData_H
+#ifndef TMPAnalysis_Ntu_TMPNtupleData_h
+#define TMPAnalysis_Ntu_TMPNtupleData_h
 
 #include <string>
 #include <vector>
 
 #include "NtuAnalysis/Common/interface/NtuData.h"
+
+// the template parameter is just used to define a type "number"
+// in NANOAOD some types are not supported, so they will be truncated:
+//    unsigned int           ->  int
+//    long long              ->  int
+//    unsigned long long     ->  int
+//    double                 ->  float
 
 class TMPNtupleData: public NtuData<float> {
 
@@ -19,8 +26,17 @@ class TMPNtupleData: public NtuData<float> {
 
   // muons
   bool use_muons;
-  int nMuons;
+  unsigned int nMuons;
+  // spherical coordinates stored as std::vector
   std::vector<number>* muoPt;
+  std::vector<number>* muoEta;
+  std::vector<number>* muoPhi;
+  // cartesian coordinates stored as native array
+  number* muoPx;
+  number* muoPy;
+  number* muoPz;
+
+  number* pSum;
 
   // jets
   bool use_jets;
@@ -30,10 +46,10 @@ class TMPNtupleData: public NtuData<float> {
  private:
 
   // dummy copy constructor and assignment
-  TMPNtupleData           ( const TMPNtupleData& td );
-  TMPNtupleData& operator=( const TMPNtupleData& td );
+  TMPNtupleData           ( const TMPNtupleData& td ) = delete;
+  TMPNtupleData& operator=( const TMPNtupleData& td ) = delete;
 
 };
 
-#endif
+#endif // TMPAnalysis_Ntu_TMPNtupleData_h
 

@@ -1,5 +1,5 @@
-#ifndef NtuEDConsumer_H
-#define NtuEDConsumer_H
+#ifndef NtuAnalysis_Write_NtuEDConsumer_h
+#define NtuAnalysis_Write_NtuEDConsumer_h
 /** \class NtuEDConsumer
  *
  *  Description: 
@@ -30,7 +30,7 @@
 //              -- Class Interface --
 //              ---------------------
 
-template<class Obj>
+template <class Obj>
 class NtuEDToken {
  public:
   typedef edm::InputTag type;
@@ -47,7 +47,7 @@ class NtuEDToken {
 };
 
 
-template<class T>
+template <class T>
 class NtuEDConsumer: public virtual T {
 
  public:
@@ -58,12 +58,12 @@ class NtuEDConsumer: public virtual T {
 
   /** Destructor
    */
-  virtual ~NtuEDConsumer() {}
+  ~NtuEDConsumer() override {}
 
   /** Operations
    */
   /// forward call to EDConsumerBase
-  template<class Obj>
+  template <class Obj>
   void consume( typename NtuEDToken<Obj>::type& token,
                 const edm::InputTag& tag ) {
     token = tag;
@@ -73,10 +73,11 @@ class NtuEDConsumer: public virtual T {
  private:
 
   // private copy and assigment constructors
-  NtuEDConsumer           ( const NtuEDConsumer& x );
-  NtuEDConsumer& operator=( const NtuEDConsumer& x );
+  NtuEDConsumer           ( const NtuEDConsumer& x ) = delete;
+  NtuEDConsumer& operator=( const NtuEDConsumer& x ) = delete;
 
 };
 
-#endif // NtuEDConsumer_H
+#endif // NtuAnalysis_Write_NtuEDConsumer_h
+
 

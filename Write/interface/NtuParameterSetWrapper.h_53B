@@ -1,5 +1,5 @@
-#ifndef PDNtuParameterSetWrapper_H
-#define PDNtuParameterSetWrapper_H
+#ifndef NtuAnalysis_Write_NtuParameterSetWrapper_h
+#define NtuAnalysis_Write_NtuParameterSetWrapper_h
 /** \class PDNtuParameterSetWrapper
  *
  *  Description: 
@@ -45,5 +45,6 @@ class NtuParameterSetWrapper {
 
 //#include "PDAnalysis/EDM/interface/PDNtuParameterSetWrapper.hpp"
 
-#endif // PDNtuParameterSetWrapper_H
+#endif // NtuAnalysis_Write_NtuParameterSetWrapper_h
+
 

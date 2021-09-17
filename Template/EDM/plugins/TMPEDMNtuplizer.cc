@@ -8,14 +8,11 @@ class TMPEDMNtuplizer: public NtuEDMWriteSteering<TMPEDMToNtuple> {
 
  public:
 
-  explicit TMPEDMNtuplizer( const edm::ParameterSet& ps );
+  explicit TMPEDMNtuplizer( const edm::ParameterSet& ps ):
+    NtuEDMWriteSteering<TMPEDMToNtuple>( ps ) {
+  }
 
 };
-
-
-TMPEDMNtuplizer::TMPEDMNtuplizer( const edm::ParameterSet& ps ):
-  NtuEDMWriteSteering<TMPEDMToNtuple>( ps ) {
-}
 
 
 //define this as a plug-in

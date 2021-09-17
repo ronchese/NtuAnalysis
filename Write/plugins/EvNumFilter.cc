@@ -1,44 +1,58 @@
+#include "FWCore/Framework/interface/EDFilter.h"
+#include "FWCore/Framework/interface/Event.h"
+
+#include "FWCore/Framework/interface/EventSetup.h"
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
+
+#include "NtuAnalysis/Common/interface/NtuEventSelect.h"
+#include "NtuTool/EDM/interface/EDFilterWrapper.h"
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
-#include "NtuAnalysis/Write/plugins/EvNumFilter.h"
 
 // system include files
 #include <iostream>
 #include <fstream>
-#include <sstream>
-#include <memory>
 
-EvNumFilter::EvNumFilter( const edm::ParameterSet& ps ):
- eventList( "evtlist" ),
- listType ( "" ) {
-  if ( ps.exists( "eventList" ) )
-                   eventList = ps.getParameter<std::string>( "eventList" );
-  if ( ps.exists( "listType"  ) )
-                   listType  = ps.getParameter<std::string>( "listType"  );
-  skipList = ( read( eventList ) && ( listType == "skip" ) );
-}
+//
+// class declaration
+//
 
+class EvNumFilter: public EDFilterWrapper,
+                   public NtuEventSelect {
 
-EvNumFilter::~EvNumFilter() {
-}
+ public:
 
+  explicit EvNumFilter( const edm::ParameterSet& ps ):
+   eventList( "evtlist" ),
+   listType ( "" ) {
+    if ( ps.exists( "eventList" ) )
+                     eventList = ps.getParameter<std::string>( "eventList" );
+    if ( ps.exists( "listType"  ) )
+                     listType  = ps.getParameter<std::string>( "listType"  );
+    skipList = ( read( eventList ) && ( listType == "skip" ) );
+  }
+  ~EvNumFilter() override {}
 
-void EvNumFilter::beginJob() {
-  return;
-}
+  void beginJob() override {}
+  void endJob() override {}
 
+ private:
 
-void EvNumFilter::endJob()  {
-  return;
-}
+  // dummy copy constructor and assignment
+  EvNumFilter           ( const EvNumFilter& c ) = delete;
+  EvNumFilter& operator=( const EvNumFilter& c ) = delete;
 
+  std::string eventList;
+  std::string listType;
+  bool skipList;
 
-bool EvNumFilter::filter( edm::Event& ev,
-                    const edm::EventSetup& es ) {
-  unsigned int runNumber   = ev.id().run();
-  unsigned int eventNumber = ev.id().event();
-  return ( skipList != find( runNumber, eventNumber ) );
-}
+  bool filter( edm::Event& ev, const edm::EventSetup& es ) override {
+    unsigned int runNumber   = ev.id().run();
+    unsigned int eventNumber = ev.id().event();
+    return ( skipList != find( runNumber, eventNumber ) );
+  }
+
+};
 
 //define this as a plug-in
 DEFINE_FWK_MODULE( EvNumFilter );

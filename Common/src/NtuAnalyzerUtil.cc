@@ -10,10 +10,10 @@
 #include "TTree.h"
 
 NtuAnalyzerUtil::NtuAnalyzerUtil() {
-  currentRun     = 0;
-  currentEvent   = 0;
-  currentEvBase  = 0;
-  currentEvSetup = 0;
+  currentRun     = nullptr;
+  currentEvent   = nullptr;
+  currentEvBase  = nullptr;
+  currentEvSetup = nullptr;
 }
 
 
@@ -21,17 +21,10 @@ NtuAnalyzerUtil::~NtuAnalyzerUtil() {
 }
 
 
-void NtuAnalyzerUtil::beginJob() {
-  return;
-}
-
-
 void NtuAnalyzerUtil::getHeader( int ientry ) {
-//  if ( currentEvBase != 0 ) return;
-//  if ( currentEvent  != 0 ) return;
-  if ( this->b_runNumber   != 0 ) this->b_runNumber  ->GetEntry( ientry );
-  if ( this->b_lumiSection != 0 ) this->b_lumiSection->GetEntry( ientry );
-  if ( this->b_eventNumber != 0 ) this->b_eventNumber->GetEntry( ientry );
+  if ( this->b_runNumber   != nullptr ) this->b_runNumber  ->GetEntry( ientry );
+  if ( this->b_lumiSection != nullptr ) this->b_lumiSection->GetEntry( ientry );
+  if ( this->b_eventNumber != nullptr ) this->b_eventNumber->GetEntry( ientry );
   return;
 }
 

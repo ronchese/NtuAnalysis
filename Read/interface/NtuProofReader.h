@@ -1,7 +1,6 @@
-#ifndef NtuProofReader_h
-#define NtuProofReader_h
+#ifndef NtuAnalysis_Read_NtuProofReader_h
+#define NtuAnalysis_Read_NtuProofReader_h
 
-//template<class T>
 class NtuProofReaderInterface: public NtuAnalyzer {
  public:
   void bJ() {
@@ -15,7 +14,6 @@ class NtuProofReaderInterface: public NtuAnalyzer {
   ClassDef(NtuProofReaderInterface,0);
 };
 
-//template <class T>
 class NtuProofReader: public NtuProofReaderInterface,
                       public TreeReader {
  protected:
@@ -26,7 +24,6 @@ class NtuProofReader: public NtuProofReaderInterface,
   ClassDef(NtuProofReader,0);
 };
 
-//template <class T>
 class NtuProofEDMReader: public NtuProofReaderInterface,
                          public EDMTreeReader {
  public:
@@ -43,5 +40,5 @@ class NtuProofEDMReader: public NtuProofReaderInterface,
 };
 
 
-#endif
+#endif // NtuAnalysis_Read_NtuProofReader_h
 

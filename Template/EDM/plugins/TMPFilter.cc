@@ -8,14 +8,11 @@ class TMPFilter: public NtuFilter<TMPEDMToNtuple> {
 
  public:
 
-  explicit TMPFilter( const edm::ParameterSet& ps );
+  explicit TMPFilter( const edm::ParameterSet& ps ):
+    NtuFilter<TMPEDMToNtuple>( ps ) {
+  }
 
 };
-
-
-TMPFilter::TMPFilter( const edm::ParameterSet& ps ):
-  NtuFilter<TMPEDMToNtuple>( ps ) {
-}
 
 
 //define this as a plug-in

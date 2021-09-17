@@ -12,46 +12,69 @@ process.MessageLogger.cerr.threshold = 'WARNING'
 #process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
 
-### define here a list of PAT files containing muons
-#filename = open('pat_files.list', 'r')
+### define here a list of (MINI)AOD files
+#filename = open('edm_files.list', 'r')
 #fileList = cms.untracked.vstring( filename.readlines() )
 
 #process.source = cms.Source ("PoolSource", fileNames=fileList)
-process.source = cms.Source("EmptyIOVSource",
-    timetype   = cms.string('runnumber'),
-    firstValue = cms.uint64(123456),
-    lastValue  = cms.uint64(124456),
-    interval   = cms.uint64(1)
+
+### an empty source is used here for testing purposes
+process.source = cms.Source("EmptySource",
+    numberEventsInRun   = cms.untracked.uint32(10)
 )
 
+### An EDFilter is available to select events using a list having the format of
+### a text file with run and event number pairs: 
+###     - only events listed in the file will be accepted, by default;
+###     - when setting listType to "skip" all events will be accepted
+###       but the listed ones, that will be skipped.
 #process.evNumFilter = cms.EDFilter('EvNumFilter',
-#    eventList = cms.string('evList')
+#    eventList = cms.string('evList'),
+#    listType = cms.string('keep')
+##    listType = cms.string('skip')
 #)
 
+### Analyze and write an user-defined flat ntuple.
+### This is an EDAnalyzer: events will be processed, written to the ntuple 
+### if selected (see TMPAnalyzer) and passed to the following module, if any;
+### to filter events according to the processing result replace TMPNtuplizer
+### with TMPFilter (see cfg_filter.py)
 process.tmpAnalyzer = cms.EDAnalyzer('TMPNtuplizer',
 
     ## mandatory
-    ## ntuple file name: empty string to drop ntuple filling
+    ## ntuple file name: giving an empty string the ntuple structure is 
+    ## filled but it's not written to the ROOT file
     ntuName = cms.untracked.string('test_ntu.root'),
     ## histogram file name
     histName = cms.untracked.string('test_his.root'),
 
     ## optional
+### Independently on the EDFilter above, a list of events can be given, with
+### the same format as in the filter above; discarded events will be passed
+### to following modules but no processing will be done, the ntuple structure
+### will not be filled and nothing will be written to the ROOT file.
 #    eventList = cms.string('evtlist'),
-#    listType = cms.string('skip'),
+#    listType = cms.string('keep'),
+##    listType = cms.string('skip'),
 
     verbose = cms.untracked.bool(True),
 
+### if RANDOM muons will be generated with random momenta in place of reading 
+### from input (mandatory when reading from an empty source)
 #    labelMuons        = cms.string('calibratedPatMuonsPFlow'),
-#    labelJets         = cms.string('selectedPatJetsLooseIDUserDataPFlow'),
     labelMuons        = cms.string('RANDOM'),
 
+### if label is not set the "jets" block will not be activated and the
+### corresponding branch(es) will not be included in the ntuple
+#    labelJets         = cms.string('selectedPatJetsLooseIDUserDataPFlow'),
+
     ## select events with at least a muon with pT > 10 GeV
-    ## (default ptCut=40GeV)
+    ## (if missing a default ptCut=15GeV will be used, see TMPEDMToNtuple.cc)
     ptCut = cms.double( 10.0 )
 
 )
 
 
-process.p = cms.Path(#process.evNumFilter *
+process.p = cms.Path(
+#                     process.evNumFilter *
                      process.tmpAnalyzer)

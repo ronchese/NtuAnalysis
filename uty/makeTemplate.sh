@@ -40,6 +40,7 @@ cat $1 |\
     sed s/${PRETMP}EDMToNtuple/${PREFIX}EDMToNtuple/g |\
     sed s/${PRETMP}Ntuplizer/${PREFIX}Ntuplizer/g |\
     sed s/${PRETMP}EDMNtuplizer/${PREFIX}EDMNtuplizer/g |\
+    sed s/${PRETMP}NANONtuplizer/${PREFIX}NANONtuplizer/g |\
     sed s/${PRETMP}Proof/${PREFIX}Proof/g |\
     sed s/${PRETMP}Filter/${PREFIX}Filter/g |\
     sed s/${PRETMP}_PACK/${PREFIX}_PACK/g |\
@@ -141,11 +142,13 @@ create_nlow EDM/bin FWLite.cc
 create_same EDM/bin/cfg_fwlite.py
 create_same EDM/bin/cfg_fwfull.py
 create_same EDM/bin/cfg_fwfEDM.py
+create_same EDM/bin/cfg_fwNANO.py
 create_same EDM/bin/cfg_filter.py
 
 mkdir -p ${SUBSYSTEM}/EDM/plugins
 create_same EDM/plugins/BuildFile.xml
 create_name EDM/plugins Ntuplizer.cc
 create_name EDM/plugins EDMNtuplizer.cc
+create_name EDM/plugins NANONtuplizer.cc
 create_name EDM/plugins Filter.cc
 

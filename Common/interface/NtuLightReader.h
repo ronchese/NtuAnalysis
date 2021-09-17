@@ -1,5 +1,5 @@
-#ifndef NtuLightReader_H
-#define NtuLightReader_H
+#ifndef NtuAnalysis_Common_NtuLightReader_h
+#define NtuAnalysis_Common_NtuLightReader_h
 
 #include "TROOT.h"
 #include "TTree.h"
@@ -14,30 +14,102 @@ class NtuLightReader {
  public:
 
   NtuLightReader() {
-    currentTree = 0;
+    currentTree() = nullptr;
     analyzedEvts = acceptedEvts = 0;
     dum = "";
   };
   virtual ~NtuLightReader() {};
 
-  TTree* currentTree;
+  TTree*& currentTree() {
+    return curTree;
+  }
   std::string currentFile;
   std::string treeName;
 
   virtual void initTree() = 0;
   void openTree( TTree* tree ) {
-    currentTree = tree;
+    currentTree() = tree;
     initTree();
     return;
   }
 
+  NtuLightReader* setBranch( const char* branchName, void* dataPtr,
+                             const char* branchData ) {
+    if ( currentTree() == nullptr ) return this;
+    currentTree()->SetBranchAddress( branchName, dataPtr  );
+    dummyString = branchData;
+    return this;
+  }
+  NtuLightReader* setBranch( const char* branchName, void* dataPtr,
+                             const char* branchData,
+                             TBranch** branchPtr ) {
+    if ( currentTree() == nullptr ) return this;
+    currentTree()->SetBranchAddress( branchName, dataPtr, branchPtr );
+    dummyString = branchData;
+    return this;
+  }
+  NtuLightReader* setBranch( const char* branchName, void* dataPtr,
+                             int bufferSize,
+                             const char* branchData ) {
+    return setBranch( branchName, dataPtr, branchData );
+  }
+  NtuLightReader* setBranch( const char* branchName, void* dataPtr,
+                             int bufferSize,
+                             const char* branchData,
+                             TBranch** branchPtr ) {
+    return setBranch( branchName, dataPtr, branchData, branchPtr );
+  }
+  template <class T>
+  NtuLightReader* setBranch( const char* branchName, T*& dataPtr,
+                             int bufferSize = 32000,
+                             int splitLevel = 99 ) {
+    return setBranch( branchName, &dataPtr, bufferSize, splitLevel );
+  }
+  template <class T>
+  NtuLightReader* setBranch( const char* branchName, T*& dataPtr,
+                             int bufferSize,
+                             int splitLevel,
+                             TBranch** branchPtr ) {
+    return setBranch( branchName, &dataPtr, bufferSize, splitLevel, branchPtr );
+  }
+  template <class T>
+  NtuLightReader* setBranch( const char* branchName, T** dataPtr,
+                             int bufferSize = 32000,
+                             int splitLevel = 99 ) {
+    if ( currentTree() == nullptr ) return this;
+    currentTree()->SetBranchAddress( branchName, dataPtr  );
+    dummySize  = bufferSize;
+    dummyLevel = splitLevel;
+    return this;
+  }
+  template <class T>
+  NtuLightReader* setBranch( const char* branchName, T** dataPtr,
+                             int bufferSize,
+                             int splitLevel,
+                             TBranch** branchPtr ) {
+    if ( currentTree() == nullptr ) return this;
+    currentTree()->SetBranchAddress( branchName, dataPtr, branchPtr );
+    dummySize  = bufferSize;
+    dummyLevel = splitLevel;
+    return this;
+  }
+  template <class T>
+  NtuLightReader* setInfo( int t, const T& x ) {
+    return this;
+  }
+
+  virtual void beginJob() { return; }
+  virtual void book    () { return; }
+  virtual void reset   () { return; }
   virtual bool analyze( int entry, int event_file, int event_tot ) {
     return true;
   }
+  virtual void endJob  () { return; }
+  virtual void plot    () { return; }
+  virtual void save    () { return; }
 
   int analyzedEvents() { return analyzedEvts; }
   int acceptedEvents() { return acceptedEvts; }
-  virtual void plot() { return; }
 
   virtual void setConfiguration( const std::string& file ) {
     std::ifstream cfg( file.c_str() );
@@ -78,6 +150,15 @@ class NtuLightReader {
     else                userParameters.insert( make_pair( key, val ) );
     return;
   }
+  template <class T>
+  void setUserParameter( const std::string& key,
+                         const           T& val ) {
+    std::stringstream sstr;
+    sstr.str( "" );
+    sstr << val;
+    setUserParameter( key, sstr.str() );
+    return;
+  }
 
   const
   std::string& getUserParameter( const std::string& key ) {
@@ -90,19 +171,26 @@ class NtuLightReader {
   }
 
 
-  template<class T>
-  void getUserParameter( const std::string& key, T& val ) {
+  template <class T>
+  void         getUserParameter( const std::string& key, T& val ) {
     std::stringstream sstr;
     sstr.str( getUserParameter( key ) );
     sstr >> val;
     return;
   }
 
-  void getUserParameter( const std::string& key, bool& val ) {
+  void         getUserParameter( const std::string& key, bool& val ) {
     const char* flag = getUserParameter( key ).c_str();
     val = (   ( *flag == 't' ) || ( *flag == 'T' ) ||
             ( ( *flag >= '1' ) && ( *flag <= '9' ) ) );
     return;
+  }
+
+  template <class T>
+  T            getUserParameter( const std::string& key ) {
+    T val;
+    getUserParameter( key, val );
+    return val;
   }
 
  protected:
@@ -135,14 +223,14 @@ class NtuLightReader {
            gROOT->cd();
       return *this;
     }
-    template<class T>
+    template <class T>
     AutoSavedObject& operator=( const std::vector<T*>& vObj ) {
       int i;
       int n = vObj.size();
       for ( i = 0; i < n; ++i ) *this = vObj[i];
       return *this;
     }
-    template<class T>
+    template <class T>
     AutoSavedObject& operator=( const std::vector<T*>* vObj ) {
       *this = *vObj;
       return *this;
@@ -161,7 +249,7 @@ class NtuLightReader {
     if ( type                == "TCanvas"  ) return true;
     return false;
   }
-  void autoSave( TList* list = 0 ) {
+  void autoSave( TList* list = nullptr ) {
     std::string type = gDirectory->ClassName();
     if ( ( type != "TFile" ) && 
        ( type != "TDirectoryFile" ) ) {
@@ -191,8 +279,8 @@ class NtuLightReader {
         dir->cd();
       }
       else if ( writable( obj ) ) {
-        if ( list == 0 ) obj->Write();
-        else             list->FindObject( obj->GetName() )->Write();
+        if ( list == nullptr ) obj->Write();
+        else                   list->FindObject( obj->GetName() )->Write();
       }
     }
     return;
@@ -206,46 +294,8 @@ class NtuLightReader {
   int analyzedEvts;
   int acceptedEvts;
 
-  void setBranch( const char* branchName, void* dataPtr,
-                  const char* branchData ) {
-    if ( currentTree == 0 ) return;
-    currentTree->SetBranchAddress( branchName, dataPtr  );
-    dummyString = branchData;
-    return;
-  }
-  void setBranch( const char* branchName, void* dataPtr,
-                  const char* branchData,
-                  TBranch** branchPtr ) {
-    if ( currentTree == 0 ) return;
-    currentTree->SetBranchAddress( branchName, dataPtr, branchPtr );
-    dummyString = branchData;
-    return;
-  }
-
-  template<class T>
-  void setBranch( const char* branchName, T** dataPtr,
-                  int bufferSize = 32000,
-                  int splitLevel = 99 ) {
-    if ( currentTree == 0 ) return;
-    currentTree->SetBranchAddress( branchName, dataPtr  );
-    dummySize  = bufferSize;
-    dummyLevel = splitLevel;
-    return;
-  }
-  template<class T>
-  void setBranch( const char* branchName, T** dataPtr,
-                  int bufferSize,
-                  int splitLevel,
-                  TBranch** branchPtr ) {
-    if ( currentTree == 0 ) return;
-    currentTree->SetBranchAddress( branchName, dataPtr, branchPtr );
-    dummySize  = bufferSize;
-    dummyLevel = splitLevel;
-    return;
-  }
-
   bool edmNtuple;
-  virtual void process( TBranch* b, int ientry ) {}
+  virtual void process( TBranch** b, int ientry ) {}
 
  private:
 
@@ -253,9 +303,10 @@ class NtuLightReader {
   NtuLightReader           ( const NtuLightReader& );
   NtuLightReader& operator=( const NtuLightReader& );
 
+  TTree* curTree;
   std::map<std::string,std::string> userParameters;
 
 };
 
-#endif
+#endif // NtuAnalysis_Common_NtuLightReader_h
 

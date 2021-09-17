@@ -1,11 +1,11 @@
-#ifndef NtuEDMReader_H
-#define NtuEDMReader_H
+#ifndef NtuAnalysis_Read_NtuEDMReader_h
+#define NtuAnalysis_Read_NtuEDMReader_h
 
 #include "NtuTool/Read/interface/EDMTreeReader.h"
 #include <iostream>
 #include <string>
 
-template<class T>
+template <class T>
 class NtuEDMReader: public T, public EDMTreeReader {
 
  public:
@@ -15,23 +15,24 @@ class NtuEDMReader: public T, public EDMTreeReader {
     setProcessName( process );
     setProducerName( producer );
   }
+  ~NtuEDMReader() override {}
 
-  virtual void beginJob() {
+  void beginJob() override {
     T::setupNtuple();
     T::beginJob();
     return;
   }
 
-  virtual bool getEntry( int ientry ) {
+  bool getEntry( int ientry ) override {
     return T::getEntry( ientry );
   };
 
  private:
 
   // dummy copy constructor and assignment
-  NtuEDMReader           ( const NtuEDMReader& );
-  NtuEDMReader& operator=( const NtuEDMReader& );
+  NtuEDMReader           ( const NtuEDMReader& ) = delete;
+  NtuEDMReader& operator=( const NtuEDMReader& ) = delete;
 
 };
 
-#endif
+#endif // NtuAnalysis_Read_NtuEDMReader_h

@@ -1,0 +1,289 @@
+
+ -------------- Description --------------
+
+The NtuAnalysis package is based on the NtuTool package and contains several
+functionalities specific for CMS analyses using (MINI)AOD as source and 
+ntuples as output or intermediate data format. Most of these functionalities 
+could be easily implemented by each analyst; they're provided in this package 
+just to avoid the replication of solutions to common needs and, consequently,
+a simplification of work and time sparing.
+
+The main features of the NtuAnalysis package are:
+- the possibility to build an analysis skeleton simply executing a command
+  on a linux terminal;
+- the encapsulation in dedicated classes of the following operations:
+  - ntuple definition,
+  - ntuple data filling from (MINI)AOD,
+  - ntuple data analysis;
+- the possibility to choose at runtime if, with the very same C++ code, 
+  a "traditional" flat ntuple is to be produced, an EDM ntuple or a NANOAOD,
+  in a fully transparent way;
+- the possibility to analyze, with the very same C++ code, "traditional" flat
+  ntuples, EDM ntuples or NANOAOD, specifying the format at runtime;
+- the possibility to link ntuple production and analysis in a single run,
+  choosing to write or skip any entry on the basis of an analysis on-the-fly,
+  returning "true" or "false" from an "analyze(...)" function;
+- the possibility to preselect ntuple entries at analysis time, to read only
+  some branch to choose if reading the whole tree and analyze it or skip the
+  entry without reading all the other branches;
+- the automatic inclusion in ntuples of run, lumisection and event numbers,
+  and the possibility to select or skip specific events simply giving a list.
+All the functionalities available from NtuTool can be used, too.
+
+The package is structured as a CMSSW subsystem, with 3 packages:
+NtuAnalysis/Common : code to common to ntuple production and analysis;
+NtuAnalysis/Write  : code to produce ntuples;
+NtuAnalysis/Read   : code to analyze ntuples.
+
+In principle the analyst does not need knowing the content of those packages,
+because all the user code is to stay in a dedicated subsystem XYZAnalysis,
+built with the "makeTemplate.sh" script mentioned above and having 
+itself 2 packages:
+XYZAnalysis/Ntu : ntuple definition and analysis, that can be exported
+                  on any PC where C++ and ROOT are installed;
+XYZAnalysis/EDM : code to get data from (MINI)AOD and fill ntuple.
+The skeleton built with the "makeTemplate.sh" script contains some example
+code that the user can easily modify and/or replicate.
+
+A documentation page, in preparation, can be found on a dedicated TWiki:
+https://twiki.cern.ch/twiki/bin/viewauth/CMS/NtuAnalysis
+
+ -------------- Recipe for the impatient user --------------
+
+Look at steps 1, 2, 3, 7 to produce and analyze a flat ntuple; to analyze 
+the same ntuple outside CMSSW look at steps 10 and 11. Look inside the files
+listed in the "Customize ntuple content, production & analysis" to see how
+to introduce your analysis material in the framework.
+Look at steps 5, 8 (and 12 to do the analysis outside CMSSW) for EDM ntuples.
+Look at steps 6, 9 (and 13 to do the analysis outside CMSSW) for NANOAOD.
+
+ -------------- Download and create an analysis skeleton --------------
+
+ ----- STEP 1 : download from git -----
+
+cd ${CMSSW_BASE}/src
+cmsenv
+git clone https://github.com/ronchese/NtuTool
+git clone https://github.com/ronchese/NtuAnalysis
+scram b
+
+# The package can be used across different CMSSW releases, running a script
+# before compilation:
+
+${CMSSW_BASE}/src/NtuAnalysis/uty/setAt764.sh #  CMSSW_7_6_4 and following
+${CMSSW_BASE}/src/NtuAnalysis/uty/setAtA40.sh # CMSSW_10_4_0 and following
+${CMSSW_BASE}/src/NtuAnalysis/uty/setAtA60.sh # CMSSW_10_6_0 and following
+
+# The CMSSW versions listed above correspond to the ones used for testing, 
+# their correctness cannot be guaranteed; e.g. a CMSSW_10_3_X could 
+# require the script "setAtA40.sh".
+
+# To run with CMSSW versions where NANOAOD is not defined, run the script
+
+${CMSSW_BASE}/src/NtuAnalysis/uty/removeNANO.sh
+
+# Refer to NtuTool instructions to handle different CMSSW versions for that
+# package and/or removal of NANOAOD interface.
+
+ ----- STEP 2 : build an analysis skeleton -----
+
+# In the following, replace "xyz" with whatever you like, a subsystem
+# named XYZAnalysis will be created.
+
+cd ${CMSSW_BASE}/src
+cmsenv
+NtuAnalysis/uty/makeTemplate.sh xyz
+scram b
+
+ -------------- Customize ntuple content, production & analysis --------------
+
+The ntuple content is defined in the classes XYZNtupleData
+and XYZNtupleBranch ; the first contains only the variables and the
+second contains the TBranch pointers and the code to bind them to the
+persistent ntuple. In principle all that could stay in just one class,
+it's splitted to add a flexibility that could be useful in some situations.
+
+The example/skeleton deals with a ntuple having 2 blocks, each of them
+has a boolean flag to allow switching it "on/off" to actually include
+the corresponding data in the persistent ntuple, when writing the ntuple
+itself, or actually read the corresponding branches when analyzing.
+
+The user has to customize the following files, more detailed informations
+and instructions are included through comments in each file:
+
+- XYZAnalysis/Ntu/interface/XYZNtupleData.h
+  contains the ntuple data (or pointers) declarations
+- XYZAnalysis/Ntu/src/XYZNtupleData.cc
+  contains the code to allocate dynamic variables, vectors or arrays
+- XYZAnalysis/Ntu/interface/XYZNtupleBranch.h
+  contains the ntuple TBranch pointers declarations
+- XYZAnalysis/Ntu/interface/XYZNtupleBranch.hpp
+  contains the calls to "setBranch(...)"
+
+- XYZAnalysis/EDM/interface/PIPPOEDMToNtuple.h
+  contains labels or input tokens, edm::Handles and so on,
+  plus the "consume" instructions required by CMSSW and calls to other
+  functions that, in their turn, call "setBranch(...)"; this code has to
+  stay in the class interface (.h) because, to get the maximum flexibility,
+  the constructor is templated.
+- XYZAnalysis/EDM/src/PIPPOEDMToNtuple.cc
+  parses the edm::ParameterSet, get data from (MINI)AOD and fill the
+  ntuple structure
+
+- XYZAnalysis/Ntu/bin/XYZAnalyzer.h
+  contains the histogram object pointers declarations as well as any other
+  member variable the user may need, plus the declaration of the functions
+  for the ntuple analysis steps (see NtuTool/INSTRUCTIONS)
+- XYZAnalysis/Ntu/bin/XYZAnalyzer.cc
+  contains the implementation of the ntuple analysis functions, i.e.
+  preliminary operations, histogram creation, actual analysis for each
+  ntuple entry, conclusive operations and saving.
+- XYZAnalysis/Ntu/bin/XYZAnalyzerUtil.(h|cc)
+  contains code that in principle could stay in XYZAnalyzer.(h|cc) but is
+  encapsulated in a separate class to allow sharing it among different
+  analyses related among them and sharing common operations, e.g. any
+  code to navigate through cross referenced indices or compute quantities
+  depending on others but not stored themselves in the ntuple.
+
+In the template skeleton two operations are encapsulated in XYZAnalyzerUtil:
+- the choice of the ntuple blocks to activate, so that some blocks can be
+  skipped when ntuple is produced, reducing space usage, or analyzed,
+  reducing reading time;
+- a simple ntuple entry preselection (see above).
+
+ -------------- Examples --------------
+
+In the following some simple examples are shown, making use of the
+template skeleton; ntuples are written and read back in 3 formats:
+- "traditional" flat ntuples,
+- EDM ntuples,
+- NANOAOD .
+In the examples two blocks are included, one for muons and one for jets;
+the muons block can be filled with random numbers to allow running the
+example without the need of any (MINI)AOD file.
+In the examples the following options are also implemented:
+- events pre-filter with a run-event list, i.e. only selected events
+  are received by the CMSSW module filling the ntuple data;
+- independently on that, a run-event list can be queried by the CMSSW module
+  filling the ntuple data, to process only listed events (or skip them);
+- ntuple entries can be made persistent, i.e. actually written to the
+  output, on the basis of an analysis on-the-fly
+- use the output of that analysis on-the-fly to filter events before
+  passing them to the following CMSSW module, if any.
+
+Due to intrinsic difference in the way EDM ntuples and NANOAOD are produced,
+there's some small difference in the way events are selected, processed and 
+filtered:
+
+- "traditional" flat ntuple production in an edm::EDAnalyzer or edm::EDFilter:
+  - pre-filter by run-event list                               = YES
+  - process or skip in the EDAnalyzer by run-event list        = YES
+  - ntuple entry writing based on analysis on-the-fly          = YES
+  - filter events before passing them to the following module  = YES
+  for skipped events no output is written, event filtering before the
+  following module is obtained using "XYZFilter" in place of "XYZNtuplizer"
+
+- EDM ntuple production:
+  - pre-filter by run-event list                               = YES
+  - process or skip in the EDAnalyzer by run-event list        = YES
+  - ntuple entry writing based on analysis on-the-fly          = YES
+  - filter events before passing them to the following module  = YES
+  for skipped events the event is written without the ntuple content,
+  event filtering before the following module is obtained adding a dedicated
+  filter in the "cms.Path"
+
+- NANOAOD production:
+  - pre-filter by run-event list                               = NO
+  - process or skip in the EDAnalyzer by run-event list        = YES
+  - ntuple entry writing based on analysis on-the-fly          = NO
+  - filter events before passing them to the following module  = YES
+  apparently NANOAOD production requires filling and writing all the events,
+  so once the event has been processed the data structure is anyway written
+
+ ----- examples - part A -----
+ -----  write a ntuple   -----
+
+ --- STEP 3 : write a "traditional" flat ntuple
+
+cd ${CMSSW_BASE}/src
+rm test_his.root ; rm test_ntu.root ; cmsRun XYZAnalysis/EDM/bin/cfg_fwfull.py
+# the produced ntuple can be analyzed as in steps 7 and 11
+
+ --- STEP 4 : write a "traditional" flat ntuple
+ ---          and use an analysis on-the-fly to filter events
+
+cd ${CMSSW_BASE}/src
+rm test_his.root ; rm test_ntf.root ; cmsRun XYZAnalysis/EDM/bin/cfg_filter.py
+# the produced ntuple can be analyzed as in steps 7 and 11
+# changing the file name
+
+ --- STEP 5 : write an EDM ntuple
+
+cd ${CMSSW_BASE}/src
+rm test_his.root ; rm test_edm.root ; cmsRun XYZAnalysis/EDM/bin/cfg_fwfEDM.py
+# the produced ntuple can be analyzed as in steps 8 and 12
+
+ --- STEP 6 : write a NANOAOD
+
+cd ${CMSSW_BASE}/src
+rm test_his.root ; rm test_nnn.root ; cmsRun XYZAnalysis/EDM/bin/cfg_fwNANO.py
+# the produced ntuple can be analyzed as in steps 9 and 13
+
+ -----     examples - part B     -----
+ ----- analyze a ntuple in CMSSW -----
+
+ --- STEP 7 : analyze a "traditional" flat ntuple in CMSSW
+
+cd ${CMSSW_BASE}/src
+echo "Y test_ntu.root" > test_ntu.list
+rm hist_ntu.root ; ${CMSSW_BASE}/bin/${SCRAM_ARCH}/xyzTreeAnalyze test_ntu.list hist_ntu.root -v use_muons t -v ntuType ntu -v verbose t
+
+ --- STEP 8 : analyze an EDM ntuple in CMSSW
+
+cd ${CMSSW_BASE}/src
+echo "Y test_edm.root" > test_edm.list
+rm hist_edm.root ; ${CMSSW_BASE}/bin/${SCRAM_ARCH}/xyzTreeAnalyze test_edm.list hist_edm.root -v use_muons t -v ntuType edm -v verbose t
+
+ --- STEP 9 : analyze a NANOAOD in CMSSW
+
+cd ${CMSSW_BASE}/src
+echo "Y test_nnn.root" > test_nnn.list
+rm hist_nnn.root ; ${CMSSW_BASE}/bin/${SCRAM_ARCH}/xyzTreeAnalyze test_nnn.list hist_nnn.root -v use_muons t -v ntuType nano -v verbose t
+
+ -----       examples - part C        -----
+ ----- analyze a ntuple outside CMSSW -----
+
+ --- STEP 10 : export the code
+
+# pack the code in the original CMSSW area:
+# the full path of a xyzAnalysis.tgz file is printed
+cd ${CMSSW_BASE}/src
+XYZAnalysis/Ntu/bin/export.sh
+# copy the xyzAnalysis.tgz on any PC where C++, ROOT and NtuTool are available
+# and unpack it
+cd .....
+tar -xzf xyzAnalysis.tgz ; cd XYZAnalysis
+# initialize NtuTool (once per session) and compile
+XYZAnalysis/Ntu/bin/compile.sh
+
+# Before going on, copy the test_*.root files produced in steps 3, 5 and 6
+# into ...../XYZAnalysis/Ntu/bin
+
+ --- STEP 11 : analyze a "traditional" flat ntuple outside CMSSW
+
+cd ...../XYZAnalysis/Ntu/bin
+echo "Y test_ntu.root" > test_ntu.list
+rm hist_ntu.root ; xyzTreeAnalyze test_ntu.list hist_ntu.root -v use_muons t -v ntuType ntu -v verbose t
+
+ --- STEP 12 : analyze an EDM ntuple outside CMSSW
+
+cd ...../XYZAnalysis/Ntu/bin
+echo "Y test_edm.root" > test_edm.list
+rm hist_edm.root ; xyzTreeAnalyze test_edm.list hist_edm.root -v use_muons t -v ntuType edm -v verbose t
+
+ --- STEP 13 : analyze a NANOAOD outside CMSSW
+
+cd ...../XYZAnalysis/Ntu/bin
+echo "Y test_nnn.root" > test_nnn.list
+rm hist_nnn.root ; xyzTreeAnalyze test_nnn.list hist_nnn.root -v use_muons t -v ntuType nano -v verbose t
+

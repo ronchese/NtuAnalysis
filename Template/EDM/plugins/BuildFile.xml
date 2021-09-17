@@ -1,7 +1,6 @@
-<use   name="FWCore/Framework"/>
-<use   name="NtuAnalysis/Write"/>
 <use   name="TMPAnalysis/EDM"/>
-<flags CXXFLAGS="-Wno-delete-non-virtual-dtor"/>
+<use   name="NtuAnalysis/Write"/>
+<use   name="FWCore/Framework"/>
 <library   file="*.cc" name="TMPAnalysisEDMPlugins">
   <flags   EDM_PLUGIN="1"/>
 </library>

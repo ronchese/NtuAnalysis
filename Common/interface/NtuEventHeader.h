@@ -1,5 +1,5 @@
-#ifndef NtuEventHeader_H
-#define NtuEventHeader_H
+#ifndef NtuAnalysis_Common_NtuEventHeader_h
+#define NtuAnalysis_Common_NtuEventHeader_h
 
 class TBranch;
 
@@ -9,7 +9,8 @@ class NtuEventHeader {
 
   NtuEventHeader() { b_runNumber   =
                      b_lumiSection =
-                     b_eventNumber = 0; }
+                     b_eventNumber = nullptr; }
+  virtual ~NtuEventHeader() {}
 
   // header
   unsigned int runNumber;
@@ -23,10 +24,10 @@ class NtuEventHeader {
  private:
 
   // dummy copy constructor and assignment
-  NtuEventHeader           ( const NtuEventHeader& );
-  NtuEventHeader& operator=( const NtuEventHeader& );
+  NtuEventHeader           ( const NtuEventHeader& ) = delete;
+  NtuEventHeader& operator=( const NtuEventHeader& ) = delete;
 
 };
 
-#endif
+#endif // NtuAnalysis_Common_NtuEventHeader_h
 

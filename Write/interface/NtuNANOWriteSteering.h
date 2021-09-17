@@ -1,10 +1,10 @@
 
-#ifndef NtuAnalysis_Write_NtuEDMWriteSteering_h
-#define NtuAnalysis_Write_NtuEDMWriteSteering_h
+#ifndef NtuAnalysis_Write_NtuNANOWriteSteering_h
+#define NtuAnalysis_Write_NtuNANOWriteSteering_h
 
 #include "NtuAnalysis/Common/interface/NtuAnalyzerUtil.h"
 
-#include "NtuTool/EDM/interface/EDMTreeWriter.h"
+#include "NtuTool/EDM/interface/NANOTreeWriter.h"
 
 #include "FWCore/Framework/interface/Event.h"
 
@@ -23,15 +23,15 @@
 //
 
 template <class T>
-class NtuEDMWriteSteering: public EDMTreeWriter,
-                           public NtuEDConsumer<EDProducerWrapper>,
-                           public T,
-                           public virtual NtuAnalyzerUtil {
+class NtuNANOWriteSteering: public NANOTreeWriter,
+                            public NtuEDConsumer<EDProducerWrapper>,
+                            public T,
+                            public virtual NtuAnalyzerUtil {
 
  public:
 
-  explicit NtuEDMWriteSteering( const edm::ParameterSet& ps );
-  ~NtuEDMWriteSteering() override;
+  explicit NtuNANOWriteSteering( const edm::ParameterSet& ps );
+  ~NtuNANOWriteSteering() override;
 
   void beginJob() override;
   void endJob() override;
@@ -39,8 +39,8 @@ class NtuEDMWriteSteering: public EDMTreeWriter,
  private:
 
   // dummy copy constructor and assignment
-  NtuEDMWriteSteering           ( const NtuEDMWriteSteering& c ) = delete;
-  NtuEDMWriteSteering& operator=( const NtuEDMWriteSteering& c ) = delete;
+  NtuNANOWriteSteering           ( const NtuNANOWriteSteering& c ) = delete;
+  NtuNANOWriteSteering& operator=( const NtuNANOWriteSteering& c ) = delete;
 
   int analyzedFile;
   std::string histName;
@@ -51,6 +51,6 @@ class NtuEDMWriteSteering: public EDMTreeWriter,
 
 };
 
-#include "NtuAnalysis/Write/interface/NtuEDMWriteSteering.hpp"
+#include "NtuAnalysis/Write/interface/NtuNANOWriteSteering.hpp"
 
-#endif // NtuAnalysis_Write_NtuEDMWriteSteering_h
+#endif // NtuAnalysis_Write_NtuNANOWriteSteering_h

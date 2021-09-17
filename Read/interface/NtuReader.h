@@ -1,31 +1,32 @@
-#ifndef NtuReader_H
-#define NtuReader_H
+#ifndef NtuAnalysis_Read_NtuReader_h
+#define NtuAnalysis_Read_NtuReader_h
 
-#include "NtuTool/Read/interface/TreeReader.h"
+#include "NtuTool/Common/interface/TreeReader.h"
 
-template<class T>
+template <class T>
 class NtuReader: public T, public TreeReader {
 
  public:
 
   NtuReader() {}
+  ~NtuReader() override {}
 
-  virtual void beginJob() {
+  void beginJob() override {
     T::setupNtuple();
     T::beginJob();
     return;
   }
 
-  virtual bool getEntry( int ientry ) {
+  bool getEntry( int ientry ) override {
     return T::getEntry( ientry );
   }
 
  private:
 
   // dummy copy constructor and assignment
-  NtuReader           ( const NtuReader& );
-  NtuReader& operator=( const NtuReader& );
+  NtuReader           ( const NtuReader& ) = delete;
+  NtuReader& operator=( const NtuReader& ) = delete;
 
 };
 
-#endif
+#endif // NtuAnalysis_Read_NtuReader_h

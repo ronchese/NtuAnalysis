@@ -1,5 +1,5 @@
-#ifndef NtuAnalyzerUtil_H
-#define NtuAnalyzerUtil_H
+#ifndef NtuAnalysis_Common_NtuAnalyzerUtil_h
+#define NtuAnalysis_Common_NtuAnalyzerUtil_h
 
 #include "NtuAnalysis/Common/interface/NtuEventHeader.h"
 #include "NtuAnalysis/Common/interface/NtuEventSelect.h"
@@ -21,7 +21,7 @@ class NtuAnalyzerUtil: public NtuEventSelect,
  public:
 
   NtuAnalyzerUtil();
-  virtual ~NtuAnalyzerUtil();
+  ~NtuAnalyzerUtil() override;
 
  protected:
 
@@ -30,8 +30,6 @@ class NtuAnalyzerUtil: public NtuEventSelect,
   const edm::Event       * currentEvent;
   const edm::EventBase   * currentEvBase;
   const edm::EventSetup  * currentEvSetup;
-
-  virtual void beginJob();
 
   virtual void getHeader( int ientry );
 
@@ -45,11 +43,11 @@ class NtuAnalyzerUtil: public NtuEventSelect,
  private:
 
   // dummy copy constructor and assignment
-  NtuAnalyzerUtil           ( const NtuAnalyzerUtil& );
-  NtuAnalyzerUtil& operator=( const NtuAnalyzerUtil& );
+  NtuAnalyzerUtil           ( const NtuAnalyzerUtil& ) = delete;
+  NtuAnalyzerUtil& operator=( const NtuAnalyzerUtil& ) = delete;
 
 
 };
 
-#endif
+#endif // NtuAnalysis_Common_NtuAnalyzerUtil_h
 

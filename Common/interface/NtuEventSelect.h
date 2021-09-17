@@ -1,5 +1,5 @@
-#ifndef NtuEventSelect_H
-#define NtuEventSelect_H
+#ifndef NtuAnalysis_Common_NtuEventSelect_h
+#define NtuAnalysis_Common_NtuEventSelect_h
 
 #include <set>
 #include <string>
@@ -39,5 +39,5 @@ class NtuEventSelect {
 };
 
 
-#endif
+#endif // NtuAnalysis_Common_NtuEventSelect_h
 

@@ -1,5 +1,5 @@
-#ifndef TMPNtupleBranch_H
-#define TMPNtupleBranch_H
+#ifndef TMPAnalysis_Ntu_TMPNtupleBranch_h
+#define TMPAnalysis_Ntu_TMPNtupleBranch_h
 
 #include "NtuAnalysis/Common/interface/NtuEventBranch.h"
 #include "TMPAnalysis/Ntu/interface/TMPNtupleData.h"
@@ -27,6 +27,12 @@ class TMPNtupleBranch: public virtual TMPNtupleData, public virtual T,
   void setBranches_muons();
   TBranch* b_nMuons;
   TBranch* b_muoPt;
+  TBranch* b_muoEta;
+  TBranch* b_muoPhi;
+  TBranch* b_muoPx;
+  TBranch* b_muoPy;
+  TBranch* b_muoPz;
+  TBranch* b_pSum;
 
   // jets
   void setBranches_jets();
@@ -36,12 +42,12 @@ class TMPNtupleBranch: public virtual TMPNtupleData, public virtual T,
  private:
 
   // dummy copy constructor and assignment
-  TMPNtupleBranch           ( const TMPNtupleBranch& td );
-  TMPNtupleBranch& operator=( const TMPNtupleBranch& td );
+  TMPNtupleBranch           ( const TMPNtupleBranch& td ) = delete;
+  TMPNtupleBranch& operator=( const TMPNtupleBranch& td ) = delete;
 
 };
 
 #include "TMPNtupleBranch.hpp"
 
-#endif
+#endif // TMPAnalysis_Ntu_TMPNtupleBranch_h
 

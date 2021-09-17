@@ -24,7 +24,7 @@ class TMPMacroAnalyzer: public virtual TMPAnalyzerUtil,
  public:
   TMPMacroAnalyzer() {}
   ~TMPMacroAnalyzer() {}
-  void setupNtuple() { PDAnalyzerUtil::setupNtuple(); }
+  void setupNtuple() { TMPAnalyzerUtil::setupNtuple(); }
 };
 
 // set nMax <= 0 to analyze all events

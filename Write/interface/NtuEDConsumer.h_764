@@ -1,5 +1,5 @@
-#ifndef NtuEDConsumer_H
-#define NtuEDConsumer_H
+#ifndef NtuAnalysis_Write_NtuEDConsumer_h
+#define NtuAnalysis_Write_NtuEDConsumer_h
 /** \class NtuEDConsumer
  *
  *  Description: 
@@ -31,7 +31,7 @@
 //              -- Class Interface --
 //              ---------------------
 
-template<class Obj>
+template <class Obj>
 class NtuEDToken {
  public:
   typedef typename edm::EDGetTokenT<Obj> type;
@@ -39,20 +39,20 @@ class NtuEDToken {
                    typename NtuEDToken<Obj>::type& t,
                    edm::Handle<Obj>& obj ) {
     const edm::Event* ep = dynamic_cast<const edm::Event*>( ev );
-    if ( ep == 0 ) return false;
+    if ( ep == nullptr ) return false;
     return ep->getByToken( t, obj );
   }
   bool get( const edm::EventBase* ev,
             edm::Handle<Obj>& obj ) const {
     const edm::Event* ep = dynamic_cast<const edm::Event*>( ev );
-    if ( ep == 0 ) return false;
+    if ( ep == nullptr ) return false;
     return ep->getByToken( token, obj );
   }
   type token;
 };
 
 
-template<class T>
+template <class T>
 class NtuEDConsumer: public virtual T {
 
  public:
@@ -63,12 +63,12 @@ class NtuEDConsumer: public virtual T {
 
   /** Destructor
    */
-  virtual ~NtuEDConsumer() {}
+  ~NtuEDConsumer() override {}
 
   /** Operations
    */
   /// forward call to EDConsumerBase
-  template<class Obj>
+  template <class Obj>
   void consume( typename NtuEDToken<Obj>::type& token,
                 const edm::InputTag& tag ) {
     token = this->template consumes<Obj>( tag );
@@ -78,12 +78,13 @@ class NtuEDConsumer: public virtual T {
  private:
 
   // private copy and assigment constructors
-  NtuEDConsumer           ( const NtuEDConsumer& x );
-  NtuEDConsumer& operator=( const NtuEDConsumer& x );
+  NtuEDConsumer           ( const NtuEDConsumer& x ) = delete;
+  NtuEDConsumer& operator=( const NtuEDConsumer& x ) = delete;
 
 };
 
 //#include "NtuAnalysis/Write/interface/NtuEDConsumer.hpp"
 
-#endif // NtuEDConsumer_H
+#endif // NtuAnalysis_Write_NtuEDConsumer_h
+
 

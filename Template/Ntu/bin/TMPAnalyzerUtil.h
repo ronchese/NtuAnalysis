@@ -1,5 +1,5 @@
-#ifndef TMPAnalyzerUtil_H
-#define TMPAnalyzerUtil_H
+#ifndef TMPAnalysis_Ntu_TMPAnalyzerUtil_h
+#define TMPAnalysis_Ntu_TMPAnalyzerUtil_h
 
 #include "TMPAnalysis/Ntu/interface/TMPNtupleBranch.h"
 #include "NtuAnalysis/Common/interface/NtuInterface.h"
@@ -9,25 +9,25 @@ class TMPAnalyzerUtil: public NtuInterface< TMPNtupleBranch<WrapperBase> > {
  public:
 
   TMPAnalyzerUtil();
-  virtual ~TMPAnalyzerUtil();
+  ~TMPAnalyzerUtil() override;
 
  protected:
 
   void setupNtuple();
-  virtual void beginJob();
+  void beginJob() override;
 
-  // pre-selection, with minimal data process 
+  // optional: pre-selection, with minimal data process 
   // before full ntuple entry reading
-  virtual bool preSelect( int ientry );
+  bool preSelect( int ientry ) override;
 
  private:
 
   // dummy copy constructor and assignment
-  TMPAnalyzerUtil           ( const TMPAnalyzerUtil& );
-  TMPAnalyzerUtil& operator=( const TMPAnalyzerUtil& );
+  TMPAnalyzerUtil           ( const TMPAnalyzerUtil& ) = delete;
+  TMPAnalyzerUtil& operator=( const TMPAnalyzerUtil& ) = delete;
 
 };
 
 
-#endif
+#endif // TMPAnalysis_Ntu_TMPAnalyzerUtil_h
 

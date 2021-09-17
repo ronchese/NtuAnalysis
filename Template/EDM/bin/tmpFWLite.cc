@@ -6,29 +6,28 @@
 #include <iostream>
 #include <iomanip>
 
+#include "TMPAnalysis/EDM/interface/TMPEDMToNtuple.h"
+#include "NtuAnalysis/Write/interface/NtuEDConsumer.h"
+#include "NtuAnalysis/Write/interface/NtuWriteInterface.h"
+#include "NtuAnalysis/Write/interface/NtuParameterSetWrapper.h"
+
+#include "PhysicsTools/FWLite/interface/TFileService.h"
+#include "PhysicsTools/FWLite/interface/CommandLineParser.h"
+
+#include "DataFormats/FWLite/interface/Event.h"
+#include "DataFormats/FWLite/interface/InputSource.h"
+#include "DataFormats/FWLite/interface/OutputFiles.h"
+#include "DataFormats/Common/interface/Handle.h"
+
+#include "FWCore/FWLite/interface/AutoLibraryLoader.h"
+#include "FWCore/Framework/interface/EDAnalyzer.h"
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
+
 #include <TH1F.h>
 #include <TH2F.h>
 #include <TROOT.h>
 #include <TFile.h>
 #include <TSystem.h>
-
-#include "DataFormats/FWLite/interface/Event.h"
-#include "DataFormats/Common/interface/Handle.h"
-#include "FWCore/FWLite/interface/AutoLibraryLoader.h"
-#include "FWCore/Framework/interface/EDAnalyzer.h"
-
-#include "PhysicsTools/FWLite/interface/TFileService.h"
-#include "PhysicsTools/FWLite/interface/CommandLineParser.h"
-
-#include "FWCore/ParameterSet/interface/ParameterSet.h"
-#include "FWCore/PythonParameterSet/interface/MakeParameterSets.h"
-#include "DataFormats/FWLite/interface/InputSource.h"
-#include "DataFormats/FWLite/interface/OutputFiles.h"
-
-#include "NtuAnalysis/Write/interface/NtuEDConsumer.h"
-#include "TMPAnalysis/EDM/interface/TMPEDMToNtuple.h"
-#include "NtuAnalysis/Write/interface/NtuWriteInterface.h"
-#include "NtuAnalysis/Write/interface/NtuParameterSetWrapper.h"
 
 using namespace std;
 
@@ -55,7 +54,7 @@ int main( int argc, char* argv[] ) {
 //  unsigned int outputEvery_ = 999999;
   string outputFile_;
 
-  const edm::ParameterSet* pps = 0;
+  const edm::ParameterSet* pps = nullptr;
   string cfg = parser.stringValue( "cfg" );
   if ( NtuParameterSetWrapper::readPSetsFrom( cfg )->existsAs<edm::ParameterSet>( "process" ) ) {
     // get the python configuration
@@ -82,7 +81,7 @@ int main( int argc, char* argv[] ) {
 //  fwlite::TFileService fs = fwlite::TFileService( outputFile_.c_str() );
 
   cout << "create writer/analyzer" << endl;
-  NtuEDConsumer<edm::EDAnalyzer>* dumPtr = 0;
+  NtuEDConsumer<edm::EDAnalyzer>* dumPtr = nullptr;
   NtuWriteInterface<TMPEDMToNtuple>* ntu = new NtuWriteInterface<TMPEDMToNtuple>( *pps, dumPtr );
 
   ntu->beginJob();
@@ -120,5 +119,6 @@ int main( int argc, char* argv[] ) {
   ntt->save( outputFile_.c_str() );
 
   return 0;
+
 }
 

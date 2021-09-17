@@ -7,11 +7,18 @@ using namespace std;
 TMPNtupleData::TMPNtupleData() {
 
   // muons
-  nMuons = 0;
-  muoPt = new vector<number>;
+  nMuons = 20; // max number of muons, used to create native arrays
+  muoPt  = new vector<number>;
+  muoEta = new vector<number>;
+  muoPhi = new vector<number>;
+  muoPx  = new number[nMuons];
+  muoPy  = new number[nMuons];
+  muoPz  = new number[nMuons];
+
+  pSum = new number[3];
 
   // jets
-  nJets = 0;
+  nJets = 100;
   jetPt = new vector<number>;
 
 }
