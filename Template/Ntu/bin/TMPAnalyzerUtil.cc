@@ -9,7 +9,7 @@ TMPAnalyzerUtil::TMPAnalyzerUtil() {
 
   // User parameters are set as names associated to a string,
   // see TMPAnalyzer.cc for more details.
-  setUserParameter( "use_muons", "false" );
+  setUserParameter( "use_muons", "true"  );
   setUserParameter( "use_jets" , "false" );
 
 }
@@ -49,6 +49,7 @@ void TMPAnalyzerUtil::beginJob() {
 // before full ntuple entry reading
 bool TMPAnalyzerUtil::preSelect( int ientry ) {
   // get number of muons
+  if ( use_muons ) // get nMuons from ntuple only if the block is active
   getEntry( &b_nMuons, ientry );
   std::cout << nMuons  << " muons" << std::endl;
   // skip events with no muons

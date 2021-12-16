@@ -52,14 +52,23 @@ process.tmpNtuTable = cms.EDProducer('TMPNANONtuplizer',
 
     verbose = cms.untracked.bool(True),
 
-### if RANDOM muons will be generated with random momenta in place of reading 
-### from input (mandatory when reading from an empty source)
+### If labelMuons is not set the "muons" block will not be activated and the
+### corresponding branch(es) will not be included in the ntuple,
+### if labelMuons is set as 'RANDOM', muons will be generated
+### with random momenta in place of reading from input
+### (mandatory when reading from an empty source)
 #    labelMuons        = cms.string('calibratedPatMuonsPFlow'),
     labelMuons        = cms.string('RANDOM'),
+#    labelMuons        = cms.string(''),
 
-### if label is not set the "jets" block will not be activated and the
-### corresponding branch(es) will not be included in the ntuple
+### If labelJets is not set the "jets" block will not be activated and the
+### corresponding branch(es) will not be included in the ntuple,
+### if labelJets is set as 'RANDOM', jets will be generated
+### with random momenta in place of reading from input
+### (mandatory when reading from an empty source)
 #    labelJets         = cms.string('selectedPatJetsLooseIDUserDataPFlow'),
+    labelJets         = cms.string('RANDOM'),
+#    labelJets         = cms.string(''),
 
     ## select events with at least a muon with pT > 10 GeV
     ## (if missing a default ptCut=15GeV will be used, see TMPEDMToNtuple.cc)

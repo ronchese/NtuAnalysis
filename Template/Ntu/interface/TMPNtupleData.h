@@ -40,8 +40,10 @@ class TMPNtupleData: public NtuData<float> {
 
   // jets
   bool use_jets;
-  int nJets;
+  unsigned int nJets;
   std::vector<number>* jetPt;
+  std::vector<number>* jetEta;
+  std::vector<number>* jetPhi;
 
  private:
 

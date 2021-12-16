@@ -4,3 +4,4 @@
 <use   name="NtuTool/Common"/>
 <use   name="root"/>
 <bin   file="treeAnalyze.cc" name="tmpTreeAnalyze"/>
+<bin   file="reducedAnalyze.cc" name="tmpReducedAnalyze"/>

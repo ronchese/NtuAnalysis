@@ -11,15 +11,17 @@ TMPNtupleData::TMPNtupleData() {
   muoPt  = new vector<number>;
   muoEta = new vector<number>;
   muoPhi = new vector<number>;
-  muoPx  = new number[nMuons];
-  muoPy  = new number[nMuons];
-  muoPz  = new number[nMuons];
+  muoPx  = new number[nMuons]();
+  muoPy  = new number[nMuons]();
+  muoPz  = new number[nMuons]();
 
   pSum = new number[3];
 
   // jets
-  nJets = 100;
-  jetPt = new vector<number>;
+  nJets = 0;
+  jetPt  = new vector<number>;
+  jetEta = new vector<number>;
+  jetPhi = new vector<number>;
 
 }
 

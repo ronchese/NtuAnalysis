@@ -77,8 +77,15 @@ void TMPEDMToNtuple::beginRun() {
 
 void TMPEDMToNtuple::read( const edm::EventBase& ev ) {
 
-  nMuons      = 0;
-  nJets       = 0;
+  if ( ( labelMuons == "RANDOM" ) || ( labelJets == "RANDOM" ) ) {
+    // set seed
+    static bool seed = true;
+    if ( seed ) {
+      srandom( 1 );
+      seed = false;
+    }
+  }
+
   if ( use_muons ) fillMuons();
   if ( use_jets  ) fillJets ();
 
@@ -110,17 +117,10 @@ void TMPEDMToNtuple::fillMuons() {
 
   if ( labelMuons == "RANDOM" ) {
 
-    // set seed
-    static bool seed = true;
-    if ( seed ) {
-      srandom( 1 );
-      seed = false;
-    }
-
     // generate random momenta
     float pm = 1.0e+30;
     while ( ( pt = -50.0 * log ( random() * 1.0 / RAND_MAX ) ) < pm ) {
-      if ( ( pt < 5.0 ) && !nMuons ) break;
+      if ( pt < 5.0 ) break;
       muoPt ->push_back( pm = pt );
       eta = random() * 5.0        / RAND_MAX - 2.5;
       phi = random() * 2.0 * M_PI / RAND_MAX - M_PI;
@@ -147,18 +147,17 @@ void TMPEDMToNtuple::fillMuons() {
     // get muons through an interface to access data by label or by token
     // according to CMSSW version
     gt_muons.get( currentEvBase, muons );
-    bool vMuons = muons.isValid();
-
-    // store muons info
-    int iObj;
-    int nObj = ( vMuons ? muons->size() : 0 );
-    muoPt ->resize( nObj );
-    muoEta->resize( nObj );
-    muoPhi->resize( nObj );
-    if ( !vMuons ) {
+    if ( !muons.isValid() ) {
+      muoPt ->resize( 0 );
+      muoEta->resize( 0 );
+      muoPhi->resize( 0 );
       cout << "invalid muons: " << getUserParameter( "labelMuons" ) << endl;
       return;
     }
+
+    // store muons info
+    int iObj;
+    int nObj = muons->size();
 
     vector<const Muon*> muonPtr;
     muonPtr.resize( nObj );
@@ -202,33 +201,61 @@ void TMPEDMToNtuple::fillMuons() {
 
 void TMPEDMToNtuple::fillJets() {
 
-  // get muons through an interface to access data by label or by token
-  // according to CMSSW version
-  gt_jets.get( currentEvBase, jets );
-  bool vJets = jets.isValid();
+  float pt;
+  float eta;
+  float phi;
 
-  // store jets info
+  if ( labelJets == "RANDOM" ) {
 
-  int iObj;
-  int nObj = ( vJets ? jets->size() : 0 );
-  jetPt  ->resize( 0 );
-  if ( !vJets ) {
-    cout << "invalid jets" << getUserParameter( "labelJets" ) << endl;
-    return;
+    // generate random momenta
+    float pm = 100.0;
+    while ( ( pt = pm * ( ( random() * 0.24 / RAND_MAX ) + 0.75 ) ) > 10.0 ) {
+      jetPt ->push_back( pm = pt );
+      eta = random() * 5.0        / RAND_MAX - 2.5;
+      phi = random() * 2.0 * M_PI / RAND_MAX - M_PI;
+      jetEta->push_back( eta );
+      jetPhi->push_back( phi );
+      ++nJets;
+    }
+
   }
 
-  vector<const Jet*> jetPtr;
-  jetPtr.resize( nObj );
-  for ( iObj = 0; iObj < nObj; ++iObj ) jetPtr[iObj] = &( jets->at( iObj ) );
+  else {
 
-  CompareByPt<Jet> jetComp;
-  sort( jetPtr.begin(), jetPtr.end(), jetComp );
+    // get jets through an interface to access data by label or by token
+    // according to CMSSW version
+    gt_jets.get( currentEvBase, jets );
+    if ( !jets.isValid() ) {
+      jetPt ->resize( 0 );
+      jetEta->resize( 0 );
+      jetPhi->resize( 0 );
+      cout << "invalid jets" << getUserParameter( "labelJets" ) << endl;
+      return;
+    }
 
-  nJets = nObj;
-  jetPt->resize( nJets );
-  for ( iObj = 0; iObj < nObj; ++iObj ) {
-    const Jet& jet = *jetPtr[iObj];
-    jetPt->at( iObj ) = jet.pt();
+    // store jets info
+    int iObj;
+    int nObj = jets->size();
+
+    vector<const Jet*> jetPtr;
+    jetPtr.resize( nObj );
+    for ( iObj = 0; iObj < nObj; ++iObj ) jetPtr[iObj] =
+                                       &( jets->at( iObj ) );
+
+    CompareByPt<Jet> jetComp; // defined in TMPEDMToNtuple.h
+    sort( jetPtr.begin(), jetPtr.end(), jetComp );
+
+    nJets = nObj;
+    jetPt ->resize( nJets );
+    jetEta->resize( nJets );
+    jetPhi->resize( nJets );
+    for ( iObj = 0; iObj < nObj; ++iObj ) {
+      const Jet& jet = *jetPtr[iObj];
+      jetPt ->at( iObj ) = jet.pt();
+      jetEta->at( iObj ) = jet.eta();
+      jetPhi->at( iObj ) = jet.phi();
+    }
+
   }
 
   return;

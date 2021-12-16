@@ -120,13 +120,13 @@ and instructions are included through comments in each file:
 - XYZAnalysis/Ntu/interface/XYZNtupleBranch.hpp
   contains the calls to "setBranch(...)"
 
-- XYZAnalysis/EDM/interface/PIPPOEDMToNtuple.h
+- XYZAnalysis/EDM/interface/XYZEDMToNtuple.h
   contains labels or input tokens, edm::Handles and so on,
   plus the "consume" instructions required by CMSSW and calls to other
   functions that, in their turn, call "setBranch(...)"; this code has to
   stay in the class interface (.h) because, to get the maximum flexibility,
   the constructor is templated.
-- XYZAnalysis/EDM/src/PIPPOEDMToNtuple.cc
+- XYZAnalysis/EDM/src/XYZEDMToNtuple.cc
   parses the edm::ParameterSet, get data from (MINI)AOD and fill the
   ntuple structure
 

@@ -38,6 +38,8 @@ class TMPNtupleBranch: public virtual TMPNtupleData, public virtual T,
   void setBranches_jets();
   TBranch* b_nJets;
   TBranch* b_jetPt;
+  TBranch* b_jetPhi;
+  TBranch* b_jetEta;
 
  private:
 

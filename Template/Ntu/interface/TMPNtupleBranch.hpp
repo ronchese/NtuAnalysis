@@ -21,8 +21,8 @@ void TMPNtupleBranch<T>::initTree() {
   // use local function "setBranch" (defined in the utility)
   // in place of ROOT "Branch" & "SetBranchAddress"
 
-  if ( use_muons ) setBranches_muons();
-  if ( use_jets  ) setBranches_jets ();
+  setBranches_muons();
+  setBranches_jets ();
 
   return;
 
@@ -32,6 +32,10 @@ void TMPNtupleBranch<T>::initTree() {
 template <class T>
 void TMPNtupleBranch<T>::setBranches_muons() {
   // muons
+  if ( !use_muons ) {
+    nMuons = 0;
+    return;
+  }
   int size = 8192; // ROOT container size
   // The function "setBranch" takes the same arguments as TTree::Branch .
   // Specific instructions to write/read in nanoAOD format:
@@ -89,15 +93,23 @@ void TMPNtupleBranch<T>::setBranches_muons() {
 template <class T>
 void TMPNtupleBranch<T>::setBranches_jets() {
   // jets
+  if ( !use_jets ) {
+    nJets = 0;
+    return;
+  }
   int size = 8192; // ROOT container size
   // No calls to "setInfo", default behaviour when writing NANOAOD:
   //     - a different table will be created for each branch;
-  //     - the size of jetPt is stored regardless of "nJets"
+  //     - the size of jetPt,jetEta,jetPhi is stored regardless of "nJets"
   //       (i.e. there's a data duplication, left just for example)
   this->setBranch( "nJets"          , &  nJets          ,
-                   "nJets/I"        , &b_nJets           );
+                   "nJets/i"        , &b_nJets           );
   this->setBranch( "jetPt"          , &  jetPt          ,
                    size, 99         , &b_jetPt           );
+  this->setBranch( "jetEta"         , &  jetEta         ,
+                   size, 99         , &b_jetEta          );
+  this->setBranch( "jetPhi"         , &  jetPhi         ,
+                   size, 99         , &b_jetPhi          );
   return;
 }
 

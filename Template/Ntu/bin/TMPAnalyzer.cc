@@ -27,6 +27,17 @@
 
 using namespace std;
 
+// Code lines to skim ntuple and/or produce a reduced ntuple are
+// activated/deactivated by the preprocessor
+// macros "SKIM_NTUPLE" and "REDUCE_NTUPLE" respectively;
+// they're set in the header file.
+// Macros are used just to flag the relevant code lines, 
+// normally the code would not make use of the preprocessor for this.
+
+#if REDUCE_NTUPLE != 0
+#include "XYZReducedNtupleWriter.h" // reduced ntuple
+#endif
+
 TMPAnalyzer::TMPAnalyzer() {
 
   cout << "new TMPAnalyzer" << endl;
@@ -67,6 +78,20 @@ void TMPAnalyzer::beginJob() {
 //  verbose = getUserParameter<bool> ( "verbose" );
 //  ptCut   = getUserParameter<float>( "ptCut"   );
 
+#if SKIM_NTUPLE != 0
+  dropBranch( "jet*" ); // drop some branch from the skimmed ntuple,
+                        // if required, a limited support for wild characters
+                        // is provided
+  initWSkim( new TFile( "skim.root", "RECREATE" ) ); // open a file for 
+                                                     // the skimmed ntuple
+#endif
+
+#if REDUCE_NTUPLE != 0
+  rWriter = new XYZReducedNtupleWriter;           // create reduced ntuple
+  rWriter->open( "reducedNtu.root", "RECREATE" ); // open file
+                                                  // for reduced ntuple
+#endif
+
   return;
 
 }
@@ -91,6 +116,8 @@ void TMPAnalyzer::book() {
 
 
 void TMPAnalyzer::reset() {
+// The macro "UTIL_USE" is automatically set in other source files,
+// according to the environment where this class is being used.
 #  if UTIL_USE == FULL
   // The whole ntuple content can be automatically reset at zero,
   // and std::vectors are cleared, by calling the "autoReset()" function.
@@ -99,6 +126,8 @@ void TMPAnalyzer::reset() {
 #elif UTIL_USE == BARE
   // If ntu content is to be reset or cleared, that should be done manually
   // when not using the full utility.
+  // This can be skipped, anyway, if there is not a specific reason to 
+  // reset or clear all data before overwriting them with the ntuple content.
   nMuons = 0;
   muoPt ->clear();
   muoEta->clear();
@@ -129,9 +158,15 @@ bool TMPAnalyzer::analyze( int entry, int event_file, int event_tot ) {
   flag = true;
 
   unsigned int iMuon;
-  float ptmu;
-  float ptmumax = -1.0;
-  float ptmu2nd = -1.0;
+  float mupt;
+  float mueta;
+  float muphi;
+  float muptmax = -1.0;
+  float mupt2nd = -1.0;
+  float angleMin = 4.0;
+  unsigned int iJet;
+  int mJet = -1;
+  int mMuon = -1;
   for ( iMuon = 0; iMuon < nMuons; ++iMuon ) {
     cout << "muon " << iMuon << '/' << nMuons << " : "
          << muoPt ->at( iMuon ) << ' '
@@ -140,26 +175,65 @@ bool TMPAnalyzer::analyze( int entry, int event_file, int event_tot ) {
          << muoPx      [iMuon]  << ' '
          << muoPy      [iMuon]  << ' '
          << muoPz      [iMuon]  << endl;
-    ptmu = muoPt->at( iMuon );
-    hptmu->Fill( ptmu );
-    if( ptmu > ptmu2nd ) {
-      if( ptmu > ptmumax ) {
-        ptmu2nd = ptmumax;
-        ptmumax = ptmu;
+    mupt  = muoPt ->at( iMuon );
+    mueta = muoEta->at( iMuon );
+    muphi = muoPhi->at( iMuon );
+    hptmu->Fill( mupt );
+    if( mupt > mupt2nd ) {
+      if( mupt > muptmax ) {
+        mupt2nd = muptmax;
+        muptmax = mupt;
       }
       else {
-        ptmu2nd = ptmu;
+        mupt2nd = mupt;
+      }
+    }
+    for ( iJet = 0; iJet < nJets; ++iJet ) {
+      // Angle between muon and jet: the "angleSphe" function is declared
+      // in NtuAnalysis/Common/interface/NtuUtil.h , but ROOT functions
+      // could be used as well
+      float angleMuJ = angleSphe( mupt, mueta, muphi,
+                                  jetPt ->at( iJet ),
+                                  jetEta->at( iJet ),
+                                  jetPhi->at( iJet ) );
+      if ( angleMuJ < angleMin ) {
+	mMuon = iMuon;
+        mJet  = iJet;
+        angleMin = angleMuJ;
       }
     }
   }
-  hptmumax->Fill( ptmumax );
-  hptmu2nd->Fill( ptmu2nd );	
+  std::cout << "min. angle: "   << angleMin
+            << " between muon " << mMuon
+            << " and jet "      << mJet << endl;
+  hptmumax->Fill( muptmax );
+  hptmu2nd->Fill( mupt2nd );	
   cout << "sum: "
        << pSum[0] << ' '
        << pSum[1] << ' '
        << pSum[2] << std::endl;
 
-  flag = ptmumax > ptCut;
+#if REDUCE_NTUPLE != 0
+  // set reduced ntuple data
+  rWriter->idMuon = mMuon;
+  rWriter->idJet  = mJet;
+  rWriter->angle  = angleMin;
+  // fill reduced ntuple
+  rWriter->fill();
+#endif
+
+  flag = muptmax > ptCut;
+
+#if SKIM_NTUPLE != 0
+  // additional instruction to skim the ntuple
+  if ( flag ) fillSkim(); // keep this event or not according with the 
+                          // results of the analysis done so far; 
+                          // here the same logical value returned by the
+                          // function is used, so that the number of selected
+                          // entries given at the end of job corresponds to
+                          // to the number of entries in the skimmed ntuple,
+                          // but different choices can be done as well
+#endif
 
   return flag;
 
@@ -167,11 +241,23 @@ bool TMPAnalyzer::analyze( int entry, int event_file, int event_tot ) {
 
 
 void TMPAnalyzer::endJob() {
+
+#if SKIM_NTUPLE != 0
+  closeSkim(); // close the skimmed ntuple file
+#endif
+
+#if REDUCE_NTUPLE != 0
+  rWriter->close(); // close file for reduced ntuple
+#endif
+
   return;
+
 }
 
 
 void TMPAnalyzer::save() {
+// The macro "UTIL_USE" is automatically set in other source files,
+// according to the environment where this class is being used.
 #  if UTIL_USE == FULL
   // All histos are automatically saved by calling the "autoSave()" function,
   // see the "book()" function for more informations.

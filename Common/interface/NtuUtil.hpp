@@ -428,8 +428,10 @@ T NtuUtil<T>::ptCMin( T px, T py, T pz,
   T s = ( px * qx ) + ( py * qy ) + ( pz * qz );
   T p = modSqua( px, py, pz );
   T q = modSqua( qx, qy, qz );
-  T t = p * q;
-  T f = ( fabs ( t ) > fabs( s ) ? sqrt( 1.0 - ( s * s / t ) ) : 1.0 );
+//  T t = p * q;
+//  T f = ( fabs ( t ) > fabs( s ) ? sqrt( 1.0 - ( s * s / t ) ) : 1.0 );
+  T z = ( s * s ) / ( p * q );
+  T f = ( z < 1.0 ? sqrt( 1.0 - z ) : 0.0 );
   return ( p < q ? sqrt( p ) * f : sqrt( q ) * f );
 }
 
@@ -453,8 +455,10 @@ T NtuUtil<T>::ptCMax( T px, T py, T pz,
   T s = ( px * qx ) + ( py * qy ) + ( pz * qz );
   T p = modSqua( px, py, pz );
   T q = modSqua( qx, qy, qz );
-  T t = p * q;
-  T f = ( fabs ( t ) > fabs( s ) ? sqrt( 1.0 - ( s * s / t ) ) : 1.0 );
+//  T t = p * q;
+//  T f = ( fabs ( t ) > fabs( s ) ? sqrt( 1.0 - ( s * s / t ) ) : 1.0 );
+  T z = ( s * s ) / ( p * q );
+  T f = ( z < 1.0 ? sqrt( 1.0 - z ) : 0.0 );
   return ( p > q ? sqrt( p ) * f : sqrt( q ) * f );
 }
 

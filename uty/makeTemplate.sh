@@ -29,6 +29,7 @@ export Filter=${PREFIX}Filter
 create_file() {
 cat $1 |\
     sed s/${PRETMP}tree/${PREFIX}tree/g |\
+    sed s/${PRETMP}reducedTree/${PREFIX}reducedTree/g |\
     sed s/${PRETMP}Analysis/${PREFIX}Analysis/g |\
     sed s/${PRETMP}AnalyzerUtil/${PREFIX}AnalyzerUtil/g |\
     sed s/${PRETMP}AnalyzerFW/${PREFIX}AnalyzerFW/g |\
@@ -36,6 +37,9 @@ cat $1 |\
     sed s/${PRETMP}MacroAnalyzer/${PREFIX}MacroAnalyzer/g |\
     sed s/${PRETMP}EDMAnalyzer/${PREFIX}EDMAnalyzer/g |\
     sed s/${PRETMP}NtupleData/${PREFIX}NtupleData/g |\
+    sed s/${PRETMP}ReducedNtupleData/${PREFIX}ReducedNtupleData/g |\
+    sed s/${PRETMP}ReducedNtupleWriter/${PREFIX}ReducedNtupleWriter/g |\
+    sed s/${PRETMP}ReducedNtupleReader/${PREFIX}ReducedNtupleReader/g |\
     sed s/${PRETMP}NtupleBranch/${PREFIX}NtupleBranch/g |\
     sed s/${PRETMP}EDMToNtuple/${PREFIX}EDMToNtuple/g |\
     sed s/${PRETMP}Ntuplizer/${PREFIX}Ntuplizer/g |\
@@ -54,7 +58,8 @@ cat $1 |\
     sed s/${LOWTMP}Select/${LOWFIX}Select/g |\
     sed s/${LOWTMP}Filter/${LOWFIX}Filter/g |\
     sed s/${LOWTMP}FWLite/${LOWFIX}FWLite/g |\
-    sed s/${LOWTMP}TreeAnalyze/${LOWFIX}TreeAnalyze/g >\
+    sed s/${LOWTMP}TreeAnalyze/${LOWFIX}TreeAnalyze/g |\
+    sed s/${LOWTMP}ReducedAnalyze/${LOWFIX}ReducedAnalyze/g >\
     $2
 }
 
@@ -104,6 +109,9 @@ create_name Ntu/bin Analyzer.h
 create_name Ntu/bin AnalyzerUtil.h
 create_name Ntu/bin Analyzer.cc
 create_name Ntu/bin AnalyzerUtil.cc
+create_name Ntu/bin ReducedNtupleData.h
+create_name Ntu/bin ReducedNtupleWriter.h
+create_name Ntu/bin ReducedNtupleReader.h
 create_name Ntu/bin ProofSetup.cc
 create_name Ntu/bin ProofAnalyzer.h
 create_name Ntu/bin ProofAnalyzer.cc
@@ -112,8 +120,11 @@ create_name Ntu/bin ProofLightAnalyzer.cc
 create_nlow Ntu/bin Macro.C
 create_nlow Ntu/bin Proof.mac
 create_same Ntu/bin/treeAnalyze.cc
+create_same Ntu/bin/reducedAnalyze.cc
 create_same Ntu/bin/compile.sh
+create_same Ntu/bin/compileReduced.sh
 create_same Ntu/bin/export.sh
+create_same Ntu/bin/exportReduced.sh
 create_same Ntu/bin/setupMacroAnalysis.sh
 cat ${SUBSYSTMP}/Ntu/bin/installProofAnalysis.sh |\
     sed s/PROOFPREFIX/${PREFIX}/ |\

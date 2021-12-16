@@ -4,7 +4,39 @@
 #include "TH1.h"
 #include "TMPAnalyzerUtil.h"
 
-class TMPAnalyzer: public virtual TMPAnalyzerUtil {
+// Activate/deactivate lines to skim ntuple:
+// a macro is used just to flag the relevant code lines, 
+// normally the code would not make use of the preprocessor.
+
+// Do not do the ntuple skim
+#define SKIM_NTUPLE 0
+// Do the ntuple skim
+//#define SKIM_NTUPLE 1
+
+#if SKIM_NTUPLE != 0
+#include "NtuTool/Common/interface/TreeFilter.h"
+#include "TFile.h"
+#endif
+
+// Activate/deactivate lines to produce a reduced ntuple:
+// a macro is used just to flag the relevant code lines, 
+// normally the code would not make use of the preprocessor.
+
+// Do not produce a reduced ntuple
+#define REDUCE_NTUPLE 0
+// Produce a reduced ntuple
+//#define REDUCE_NTUPLE 1
+
+#if REDUCE_NTUPLE != 0
+class XYZReducedNtupleWriter;
+#endif
+
+class TMPAnalyzer: public virtual TMPAnalyzerUtil
+#if SKIM_NTUPLE != 0
+                 , public virtual TreeFilter // additional header file
+                                             // to skim ntuples
+#endif
+ {
 
  public:
 
@@ -38,6 +70,10 @@ class TMPAnalyzer: public virtual TMPAnalyzerUtil {
  protected:
 
   double ptCut;
+
+#if REDUCE_NTUPLE != 0
+  XYZReducedNtupleWriter* rWriter;
+#endif
 
  private:
 
