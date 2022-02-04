@@ -5,8 +5,6 @@ if [ -z ${CMSSW_BASE} ] ; then
   exit
 fi
 
-export CURRENTDIR=`/bin/pwd`
-
 export PREFIX=`echo $1 | awk '{print toupper($0)}'`
 export LOWFIX=`echo $1 | awk '{print tolower($0)}'`
 
@@ -162,4 +160,10 @@ create_name EDM/plugins Ntuplizer.cc
 create_name EDM/plugins EDMNtuplizer.cc
 create_name EDM/plugins NANONtuplizer.cc
 create_name EDM/plugins Filter.cc
+
+mkdir -p ${SUBSYSTEM}/uty
+create_same uty/setForReadOnly.sh
+create_same uty/setForWriteOnly.sh
+chmod u+x ${SUBSYSTEM}/uty/setForReadOnly.sh
+chmod u+x ${SUBSYSTEM}/uty/setForWriteOnly.sh
 
