@@ -28,7 +28,7 @@
 //#define REDUCE_NTUPLE 1
 
 #if REDUCE_NTUPLE != 0
-class XYZReducedNtupleWriter;
+class TMPReducedNtupleWriter;
 #endif
 
 class TMPAnalyzer: public virtual TMPAnalyzerUtil
@@ -72,7 +72,7 @@ class TMPAnalyzer: public virtual TMPAnalyzerUtil
   double ptCut;
 
 #if REDUCE_NTUPLE != 0
-  XYZReducedNtupleWriter* rWriter;
+  TMPReducedNtupleWriter* rWriter;
 #endif
 
  private:

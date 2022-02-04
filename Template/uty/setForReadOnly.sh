@@ -5,5 +5,5 @@ if [ -z ${CMSSW_BASE} ] ; then
   exit
 fi
 
-rm -rf ${CMSSW_BASE}/src/XYZAnalysis/EDM
+rm -rf ${CMSSW_BASE}/src/TMPAnalysis/EDM
 

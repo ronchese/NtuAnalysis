@@ -2,7 +2,7 @@
 
 cd `dirname $0`/../../..
 export TMP_PATH=TMPAnalysis/Ntu
-export TMP_PACK=`pwd`/xyzAnalysisReduced.tgz
+export TMP_PACK=`pwd`/tmpAnalysisReduced.tgz
 rm -f ${TMP_PACK}
 tar -czf ${TMP_PACK}                     \
 ${TMP_PATH}/bin/TMPReducedNtupleData.*   \

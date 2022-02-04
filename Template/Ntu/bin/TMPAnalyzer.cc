@@ -35,7 +35,7 @@ using namespace std;
 // normally the code would not make use of the preprocessor for this.
 
 #if REDUCE_NTUPLE != 0
-#include "XYZReducedNtupleWriter.h" // reduced ntuple
+#include "TMPReducedNtupleWriter.h" // reduced ntuple
 #endif
 
 TMPAnalyzer::TMPAnalyzer() {
@@ -87,7 +87,7 @@ void TMPAnalyzer::beginJob() {
 #endif
 
 #if REDUCE_NTUPLE != 0
-  rWriter = new XYZReducedNtupleWriter;           // create reduced ntuple
+  rWriter = new TMPReducedNtupleWriter;           // create reduced ntuple
   rWriter->open( "reducedNtu.root", "RECREATE" ); // open file
                                                   // for reduced ntuple
 #endif
