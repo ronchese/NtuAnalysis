@@ -63,7 +63,7 @@ class TMPAnalyzer: public virtual TMPAnalyzerUtil
   using WrapperBase::plot; // needed for the following declaration
 //  void plot() override; // plot histograms on the screen (optional, see .cc)
   using WrapperBase::save;
-  void save() override; // save the histograms on a ROOT file
+  void save() override; // save histograms on a ROOT file (optional, see .cc)
 
   bool verbose;
 

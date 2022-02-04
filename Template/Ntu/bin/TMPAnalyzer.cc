@@ -125,7 +125,8 @@ void TMPAnalyzer::reset() {
   autoReset();
 #elif UTIL_USE == BARE
   // If ntu content is to be reset or cleared, that should be done manually
-  // when not using the full utility.
+  // when not using the full utility, i.e. when using this class as a 
+  // simple ROOT macro.
   // This can be skipped, anyway, if there is not a specific reason to 
   // reset or clear all data before overwriting them with the ntuple content.
   nMuons = 0;
@@ -161,8 +162,8 @@ bool TMPAnalyzer::analyze( int entry, int event_file, int event_tot ) {
   float mupt;
   float mueta;
   float muphi;
-  float muptmax = -1.0;
-  float mupt2nd = -1.0;
+  float ptmumax = -1.0;
+  float ptmu2nd = -1.0;
   float angleMin = 4.0;
   unsigned int iJet;
   int mJet = -1;
@@ -179,13 +180,13 @@ bool TMPAnalyzer::analyze( int entry, int event_file, int event_tot ) {
     mueta = muoEta->at( iMuon );
     muphi = muoPhi->at( iMuon );
     hptmu->Fill( mupt );
-    if( mupt > mupt2nd ) {
-      if( mupt > muptmax ) {
-        mupt2nd = muptmax;
-        muptmax = mupt;
+    if( mupt > ptmu2nd ) {
+      if( mupt > ptmumax ) {
+        ptmu2nd = ptmumax;
+        ptmumax = mupt;
       }
       else {
-        mupt2nd = mupt;
+        ptmu2nd = mupt;
       }
     }
     for ( iJet = 0; iJet < nJets; ++iJet ) {
@@ -206,8 +207,8 @@ bool TMPAnalyzer::analyze( int entry, int event_file, int event_tot ) {
   std::cout << "min. angle: "   << angleMin
             << " between muon " << mMuon
             << " and jet "      << mJet << endl;
-  hptmumax->Fill( muptmax );
-  hptmu2nd->Fill( mupt2nd );	
+  hptmumax->Fill( ptmumax );
+  hptmu2nd->Fill( ptmu2nd );	
   cout << "sum: "
        << pSum[0] << ' '
        << pSum[1] << ' '
@@ -222,7 +223,7 @@ bool TMPAnalyzer::analyze( int entry, int event_file, int event_tot ) {
   rWriter->fill();
 #endif
 
-  flag = muptmax > ptCut;
+  flag = ptmumax > ptCut;
 
 #if SKIM_NTUPLE != 0
   // additional instruction to skim the ntuple
@@ -255,16 +256,24 @@ void TMPAnalyzer::endJob() {
 }
 
 
+// The following function is optional and it's aimed at saving histograms
+// when data processing is finished.
+// Actually it's needed only when not using the full utility, otherwise
+// the function could simply be removed, relying on the default behaviour.
 void TMPAnalyzer::save() {
 // The macro "UTIL_USE" is automatically set in other source files,
 // according to the environment where this class is being used.
 #  if UTIL_USE == FULL
   // All histos are automatically saved by calling the "autoSave()" function,
   // see the "book()" function for more informations.
-  // This option is not available when not using the full utility.
+  // This option is not available when not using the full utility, i.e. when
+  // using this class as a simple ROOT macro;
+  // on the contrary it's the default when the full utility i used, 
+  // so in that case the whole function could be simply removed.
   autoSave();
 #elif UTIL_USE == BARE
-  // When not using the full utility histos are to be saved explicitly
+  // When not using the full utility, i.e. when using this class as a
+  // simple ROOT macro, histograms are to be saved explicitly.
   hptmumax->Write();
   hptmu2nd->Write();
   hptmu   ->Write();

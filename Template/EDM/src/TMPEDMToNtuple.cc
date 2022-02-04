@@ -46,6 +46,12 @@ void TMPEDMToNtuple::build( const edm::ParameterSet& ps ) {
   // of course the default value given here is from the edm::ParameterSet
   // point of view, it has no relation with the default values set in
   // TMPAnalyzer and TMPAnalyzerUtil constructors
+  double ptCut; // ptCut is declared in the TMPAnalyzer example,
+                // here it is re-declared to allow compiling this code also
+                // if its declaration is missing there; in this way 
+                // the declaration in TMPAnalyzer, if present, is hidden,
+                // but the value is caught all the same by TMPAnalyzer
+                // via "setUserParameter/getUserParameter".
   GET_PARAMETER( ptCut, "15.0" );
 
   // The function "setupNtuple()" is defined in TMPAnalyzerUtil ,
