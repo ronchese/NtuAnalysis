@@ -35,14 +35,30 @@ class NtuEDToken {
  public:
   typedef edm::InputTag type;
   static bool get( const edm::EventBase* ev,
+                   NtuEDToken<Obj>& t,
                    typename NtuEDToken<Obj>::type& t,
                    edm::Handle<Obj>& obj ) {
-    return ev->getByLabel( t, obj );
+    return ev->getByLabel( t.token, obj );
   }
   bool get( const edm::EventBase* ev,
             edm::Handle<Obj>& obj ) const {
     return ev->getByLabel( token, obj );
   }
+  type token;
+};
+
+
+template<class Obj,class Rec>
+class NtuESToken {
+ public:
+  typedef edm::ESInputTag type;
+  bool get( const edm::EventSetup* es,
+            edm::ESHandle<Obj>& obj ) const {
+    if ( tagged )
+    return es->get<Rec>().get( token, obj );
+    return es->get<Rec>().get( obj );
+  }
+  bool tagged;
   type token;
 };
 
@@ -64,9 +80,28 @@ class NtuEDConsumer: public virtual T {
    */
   /// forward call to EDConsumerBase
   template <class Obj>
-  void consume( typename NtuEDToken<Obj>::type& token,
+  void consume( NtuEDToken<Obj>& tw,
                 const edm::InputTag& tag ) {
-    token = tag;
+    tw.token = tag;
+    return;
+  }
+  template<class Obj,class Rec>
+  void esConsume( NtuESToken<Obj,Rec>& tw ) {
+    tw.tagged = false;
+    return;
+  }
+  template<class Obj,class Rec>
+  void esConsume( NtuESToken<Obj,Rec>& tw,
+                  const std::string& label ) {
+    tw.tagged = true;
+    tw.token = edm::ESInputTag( "", label );
+    return;
+  }
+  template<class Obj,class Rec>
+  void esConsume( NtuESToken<Obj,Rec>& tw,
+                  const edm::ESInputTag& tag ) {
+    tw.tagged = true;
+    tw.token = tag;
     return;
   }
 

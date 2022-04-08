@@ -13,6 +13,11 @@
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
+// header files for examples of getting data from EventSetup
+//#include "MagneticField/Engine/interface/MagneticField.h"
+//#include "MagneticField/Records/interface/IdealMagneticFieldRecord.h"
+//#include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
+//#include "TrackingTools/Records/interface/TransientTrackRecord.h"
 #include <string>
 #include <vector>
 class TFile;
@@ -38,6 +43,12 @@ class TMPEDMToNtuple: public TMPAnalyzer,
                                                  labelMuons );
     oc.template consume< std::vector<pat::Jet > >( gt_jets ,
                                                  labelJets  );
+    // examples of access to data from EventSetup
+//    oc.template esConsume< MagneticField,
+//                           IdealMagneticFieldRecord >( gt_magField );
+//    oc.template esConsume< TransientTrackBuilder,
+//                           TransientTrackRecord >( gt_ttB,
+//                                                   "TransientTrackBuilder" );
   }
   ~TMPEDMToNtuple() override;
 
@@ -59,12 +70,20 @@ class TMPEDMToNtuple: public TMPAnalyzer,
   std::string labelMuons;
   std::string labelJets;
 
-  edm::Handle< std::vector<pat::Muon> >    muons;
-  edm::Handle< std::vector<pat::Jet > >    jets;
+  edm::Handle< std::vector<pat::Muon> > muons;
+  edm::Handle< std::vector<pat::Jet > > jets;
+  // examples of data to get from EventSetup
+//  edm::ESHandle<TransientTrackBuilder>  ttB;
+//  edm::ESHandle<MagneticField> magField;
 
   // interfaces to allow uniform access to data in different CMSSW versions
   NtuEDToken < std::vector<pat::Muon> > gt_muons;
   NtuEDToken < std::vector<pat::Jet > > gt_jets;
+  // examples of tokens to get data from EventSetup
+//  NtuESToken< MagneticField,
+//              IdealMagneticFieldRecord > gt_magField;
+//  NtuESToken< TransientTrackBuilder,
+//              TransientTrackRecord >     gt_ttB;
 
   void build( const edm::ParameterSet& ps );
 

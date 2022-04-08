@@ -54,7 +54,7 @@ class NtuEDMAnalyzer: public virtual NtuEventHeader,
 
   template <class Consumer, class Obj>
   static void consume( NtuEDConsumer<Consumer>* c,
-                       typename NtuEDToken<Obj>::type& token,
+                       NtuEDToken<Obj>& token,
                        const std::string& label ) {
     if ( label == "" ) return;
     edm::InputTag tag( label );
@@ -63,9 +63,30 @@ class NtuEDMAnalyzer: public virtual NtuEventHeader,
   }
   template <class Consumer, class Obj>
   static void consume( NtuEDConsumer<Consumer>* c,
-                       typename NtuEDToken<Obj>::type& token,
+                       NtuEDToken<Obj>& token,
                        const edm::InputTag tag ) {
     if ( c != 0 ) c->template consume<Obj>( token, tag );
+    return;
+  }
+  template <class Consumer, class Obj, class Rec>
+  static void esConsume( NtuEDConsumer<Consumer>* c,
+                         NtuESToken<Obj,Rec>& token ) {
+    if ( c != 0 ) c->template esConsume<Obj,Rec>( token );
+    return;
+  }
+  template <class Consumer, class Obj, class Rec>
+  static void esConsume( NtuEDConsumer<Consumer>* c,
+                         NtuESToken<Obj,Rec>& token,
+                         const std::string& label ) {
+    if ( c != 0 ) c->template esConsume<Obj,Rec>( token,
+                              edm::ESInputTag( "", label ) );
+    return;
+  }
+  template <class Consumer, class Obj, class Rec>
+  static void esConsume( NtuEDConsumer<Consumer>* c,
+                         NtuESToken<Obj,Rec>& token,
+                         const edm::ESInputTag tag ) {
+    if ( c != 0 ) c->template esConsume<Obj,Rec>( token, tag );
     return;
   }
 
@@ -78,13 +99,31 @@ class NtuEDMAnalyzer: public virtual NtuEventHeader,
     template <class Obj>
     void consume( NtuEDToken<Obj>& nt,
                   const std::string& label ) {
-      analyzer->template consume<T,Obj>( consumer, nt.token, label );
+      analyzer->template consume<T,Obj>( consumer, nt, label );
       return;
     }
     template <class Obj>
     void consume( NtuEDToken<Obj>& nt,
                   const edm::InputTag tag ) {
-      analyzer->template consume<T,Obj>( consumer, nt.token, tag );
+      analyzer->template consume<T,Obj>( consumer, nt, tag );
+      return;
+    }
+    template<class Obj,class Rec>
+    void esConsume( NtuESToken<Obj,Rec>& nt ) {
+      analyzer->template esConsume<T,Obj,Rec>( consumer, nt );
+      return;
+    }
+    template<class Obj,class Rec>
+    void esConsume( NtuESToken<Obj,Rec>& nt,
+                    const std::string& label ) {
+      analyzer->template esConsume<T,Obj,Rec>( consumer, nt,
+                                               edm::ESInputTag( "", label ) );
+      return;
+    }
+    template<class Obj,class Rec>
+    void esConsume( NtuESToken<Obj,Rec>& nt,
+                    const edm::ESInputTag& tag ) {
+     analyzer->template esConsume<T,Obj,Rec>( consumer, nt, tag );
       return;
     }
    private:

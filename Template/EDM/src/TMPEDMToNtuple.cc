@@ -92,6 +92,11 @@ void TMPEDMToNtuple::read( const edm::EventBase& ev ) {
     }
   }
 
+  // examples of getting data from EventSetup through an interface
+  // to access data by label or by token according to CMSSW version
+//  gt_magField.get( currentEvSetup, magField );
+//  gt_ttB     .get( currentEvSetup, ttB );
+
   if ( use_muons ) fillMuons();
   if ( use_jets  ) fillJets ();
 
