@@ -3,6 +3,8 @@
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
 
+#include "FWCore/Framework/interface/MakerMacros.h"
+
 #include <iostream>
 #include <sstream>
 #include <map>
@@ -63,6 +65,16 @@ void TMPEDMToNtuple::build( const edm::ParameterSet& ps ) {
 
 
 TMPEDMToNtuple::~TMPEDMToNtuple() {
+}
+
+
+void TMPEDMToNtuple::fillDescriptions(
+                     edm::ConfigurationDescriptions& descriptions,
+                     edm::ParameterSetDescription& pSetDesc ) {
+   edm::ParameterSetDescription& desc = pSetDesc;
+   desc.add<string>( "labelMuons", "RANDOM" );
+   desc.add<string>( "labelJets" , "RANDOM" );
+   return;
 }
 
 

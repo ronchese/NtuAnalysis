@@ -11,6 +11,13 @@ class TMPEDMNtuplizer: public NtuEDMWriteSteering<TMPEDMToNtuple> {
   explicit TMPEDMNtuplizer( const edm::ParameterSet& ps ):
     NtuEDMWriteSteering<TMPEDMToNtuple>( ps ) {
   }
+  static void fillDescriptions( edm::ConfigurationDescriptions& descriptions ) {
+    edm::ParameterSetDescription pSetDesc;
+    pSetDesc.addUntracked<std::string>( "histName", "his.root" );
+    pSetDesc.addUntracked<bool       >(  "verbose", true );
+    TMPEDMToNtuple::fillDescriptions( descriptions, pSetDesc );
+    descriptions.add( "process.tmpEDMAnalyzer", pSetDesc );
+  }
 
 };
 

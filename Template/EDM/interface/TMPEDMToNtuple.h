@@ -52,6 +52,9 @@ class TMPEDMToNtuple: public TMPAnalyzer,
   }
   ~TMPEDMToNtuple() override;
 
+  static void fillDescriptions( edm::ConfigurationDescriptions& descriptions,
+                                edm::ParameterSetDescription& pSetDesc );
+
   virtual void beginJob();
   virtual void beginRun();
   virtual void read( const edm::EventBase& ev );

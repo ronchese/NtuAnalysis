@@ -6,6 +6,7 @@
 #include "NtuAnalysis/Common/interface/NtuEventHeader.h"
 #include "NtuAnalysis/Common/interface/NtuAnalyzerUtil.h"
 #include "NtuAnalysis/Write/interface/NtuEDConsumer.h"
+#include "NtuAnalysis/Write/interface/NtuWriteSteering.h"
 #include "NtuTool/Common/interface/TreeWrapper.h"
 
 #include "FWCore/Framework/interface/Event.h"

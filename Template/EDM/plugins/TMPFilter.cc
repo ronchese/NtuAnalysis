@@ -11,6 +11,14 @@ class TMPFilter: public NtuFilter<TMPEDMToNtuple> {
   explicit TMPFilter( const edm::ParameterSet& ps ):
     NtuFilter<TMPEDMToNtuple>( ps ) {
   }
+  static void fillDescriptions( edm::ConfigurationDescriptions& descriptions ) {
+    edm::ParameterSetDescription pSetDesc;
+    pSetDesc.addUntracked<std::string>(  "ntuName", "ntu.root" );
+    pSetDesc.addUntracked<std::string>( "histName", "his.root" );
+    pSetDesc.addUntracked<bool       >(  "verbose", true );
+    TMPEDMToNtuple::fillDescriptions( descriptions, pSetDesc );
+    descriptions.add( "process.bphvtxFilter", pSetDesc );
+  }
 
 };
 
