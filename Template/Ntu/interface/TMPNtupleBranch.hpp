@@ -55,6 +55,8 @@ void TMPNtupleBranch<T>::setBranches_muons() {
   //       at 10000 by default; in this example the initial value
   //       of nMuons is set at 20 in TMPNtupleData.cc, so it's used in
   //       place of hardcoding "20".
+  //     - when writing NANOAOD branches called in the same chain go in the
+  //       same table, and the arrays share the same size.
   // When writing/reading other ntuple formats different than NANOAOD,
   //    i.e. traditional flat ntuple or EDM ntuples, the calls to "setInfo"
   //    are simply ignored.

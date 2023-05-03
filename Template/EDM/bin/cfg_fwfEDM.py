@@ -36,11 +36,11 @@ process.source = cms.Source("EmptySource",
 
 ### Analyze and write an EDM ntuple.
 ### This is an EDProducer: events will be processed, the ntuple content will
-### be added to the edm::Event if selected (see TMPAnalyzer), passed to the
+### be added to the edm::Event if selected (see TMPEDMAnalyzer), passed to the
 ### following module, if any, and finally events will be written to the output
 ### (see the OutputModule); an explicit filter to select events according to 
 ### the process result can be added (see the EDMNtupleFilter module).
-process.tmpAnalyzer = cms.EDProducer('TMPEDMNtuplizer',
+process.tmpEDMAnalyzer = cms.EDProducer('TMPEDMNtuplizer',
 
     ## mandatory
     ## histogram file name
@@ -90,7 +90,7 @@ process.tmpAnalyzer = cms.EDProducer('TMPEDMNtuplizer',
 process.tmpFilter = cms.EDFilter('EDMNtupleFilter')
 process.p = cms.Path(
 #                     process.evNumFilter *
-                     process.tmpAnalyzer
+                     process.tmpEDMAnalyzer
 #                   * process.tmpFilter
 )
 
@@ -99,7 +99,7 @@ process.out = cms.OutputModule(
     "PoolOutputModule",
     outputCommands = cms.untracked.vstring(
       "drop *",
-      "keep *_tmpAnalyzer_*_*"      
+      "keep *_tmpEDMAnalyzer_*_*"      
     ),
     fileName = cms.untracked.string('test_edm.root'),
     SelectEvents = cms.untracked.PSet(

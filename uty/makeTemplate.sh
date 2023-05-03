@@ -53,8 +53,10 @@ cat $1 |\
     sed s/${LOWTMP}Proof/${LOWFIX}Proof/g |\
     sed s/${LOWTMP}Analysis/${LOWFIX}Analysis/g |\
     sed s/${LOWTMP}Analyzer/${LOWFIX}Analyzer/g |\
+    sed s/${LOWTMP}EDMAnalyzer/${LOWFIX}EDMAnalyzer/g |\
     sed s/${LOWTMP}Select/${LOWFIX}Select/g |\
     sed s/${LOWTMP}Filter/${LOWFIX}Filter/g |\
+    sed s/${LOWTMP}NtuTable/${LOWFIX}NtuTable/g |\
     sed s/${LOWTMP}FWLite/${LOWFIX}FWLite/g |\
     sed s/${LOWTMP}TreeAnalyze/${LOWFIX}TreeAnalyze/g |\
     sed s/${LOWTMP}ReducedAnalyze/${LOWFIX}ReducedAnalyze/g >\

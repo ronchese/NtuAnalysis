@@ -77,7 +77,7 @@ process.tmpNtuTable = cms.EDProducer('TMPNANONtuplizer',
 )
 
 ### A filter can be included in the path, to pass the event to following
-### modules, only for event selected by SimpleNtuEDMModule::fill function.
+### modules, only for event selected by TMPAnalyzer::analyze function.
 ### Unluckily this is implemented in a largely suboptimal way, using
 ### a "static bool" flag: it's incompatible with multithread running and
 ### doesn't comply with CMSSW rules.
